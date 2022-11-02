@@ -1,0 +1,602 @@
+[
+    {
+        "id": "3fab34f6aa92e94f",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9049751875e1c761",
+        "type": "inject",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 100,
+        "wires": [
+            [
+                "78f4ad02a5ea9128"
+            ]
+        ]
+    },
+    {
+        "id": "c39ee1f3b02e3a0c",
+        "type": "comment",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "Exercise 8-1",
+        "info": "",
+        "x": 110,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "78f4ad02a5ea9128",
+        "type": "http request",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://data.nasdaq.com/api/v3/datasets/HKEX/HHINU2017.json?api_key=EGsGVfuQhbyJ34vbNNXj",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "08be702143a6e556",
+                "0a15466beff13baa"
+            ]
+        ]
+    },
+    {
+        "id": "0a15466beff13baa",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "08be702143a6e556",
+        "type": "function",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "function 1",
+        "func": "var objdata = JSON.parse(msg.payload);\nvar dataset = objdata.dataset;\nmsg.payload = dataset.data[0][2];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 100,
+        "wires": [
+            [
+                "149485af46fb9f3b"
+            ]
+        ]
+    },
+    {
+        "id": "149485af46fb9f3b",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e767701440ebdf94",
+        "type": "inject",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "6031258ab7434f91"
+            ]
+        ]
+    },
+    {
+        "id": "b5ab5a166cacce2b",
+        "type": "comment",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "Exercise 8-2",
+        "info": "",
+        "x": 110,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "6031258ab7434f91",
+        "type": "http request",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://data.nasdaq.com/api/v3/datasets/HKEX/HHINU2017.json?api_key=EGsGVfuQhbyJ34vbNNXj",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 330,
+        "y": 280,
+        "wires": [
+            [
+                "e9f84aae69af6f33",
+                "970c112590d8c180"
+            ]
+        ]
+    },
+    {
+        "id": "970c112590d8c180",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "e9f84aae69af6f33",
+        "type": "function",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "function 2",
+        "func": "var objdata = JSON.parse(msg.payload);\nvar dataset = objdata.dataset;\nmsg.payload = dataset.data;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 280,
+        "wires": [
+            [
+                "32e21f782e3da762",
+                "d76a35ebc22c203f"
+            ]
+        ]
+    },
+    {
+        "id": "32e21f782e3da762",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "d76a35ebc22c203f",
+        "type": "function",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "function 3",
+        "func": "var data = msg.payload;\nvar len = data.length;\nvar Bid = [];\nfor (let i= 0; i< len; i++){\n    Bid.push(data[i][2]);\n}\nmsg.payload = Bid;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 280,
+        "wires": [
+            [
+                "a16a6611c4e84b44"
+            ]
+        ]
+    },
+    {
+        "id": "a16a6611c4e84b44",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "aaab506d9b0ecf3a",
+        "type": "inject",
+        "z": "3fab34f6aa92e94f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "dc791781bd2e9d72"
+            ]
+        ]
+    },
+    {
+        "id": "21ee0293be025b90",
+        "type": "comment",
+        "z": "3fab34f6aa92e94f",
+        "name": "Exercise 8-3",
+        "info": "",
+        "x": 110,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "dc791781bd2e9d72",
+        "type": "http request",
+        "z": "3fab34f6aa92e94f",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://data.nasdaq.com/api/v3/datasets/HKEX/HHINU2017.json?api_key=EGsGVfuQhbyJ34vbNNXj",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 330,
+        "y": 480,
+        "wires": [
+            [
+                "17b214cb7357fa58",
+                "19e335e5e59c5e3f"
+            ]
+        ]
+    },
+    {
+        "id": "19e335e5e59c5e3f",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "17b214cb7357fa58",
+        "type": "function",
+        "z": "3fab34f6aa92e94f",
+        "name": "function 4",
+        "func": "var objdata = JSON.parse(msg.payload);\nvar dataset = objdata.dataset;\nmsg.payload = dataset.data;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 480,
+        "wires": [
+            [
+                "3c1deff6d8cb7511",
+                "e8c4fe6ebc01ece1"
+            ]
+        ]
+    },
+    {
+        "id": "3c1deff6d8cb7511",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e8c4fe6ebc01ece1",
+        "type": "function",
+        "z": "3fab34f6aa92e94f",
+        "name": "function 5",
+        "func": "var data = msg.payload;\nvar len = data.length;\nvar Bid = [];\nfor (let i= 0; i< len; i++){\n    Bid.push(data[i][2]);\n}\nmsg.payload = Bid;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 480,
+        "wires": [
+            [
+                "063359486f27bf44",
+                "2867f49cda97140d"
+            ]
+        ]
+    },
+    {
+        "id": "063359486f27bf44",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "2867f49cda97140d",
+        "type": "ui_template",
+        "z": "3fab34f6aa92e94f",
+        "group": "92f0764028d914f9",
+        "name": "",
+        "order": 0,
+        "width": "6",
+        "height": "17",
+        "format": "<html>\n\n<head>\n    <!-- Plotly.js -->\n    <script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n</head>\n\n<body>\n    <!-- Plotly chart will be drawn inside this DIV -->\n    <div id=\"graphDiv\"></div>\n    <script>\n        /* JAVASCRIPT CODE GOES HERE */\n    </script>\n\n    <h3>Testing dynamic scripts with Dashboard 2.0</h3>\n    {{msg.payload}}\n    <script>\n        (function(scope) {\n        console.log('Position 1');\n        console.dir(scope);\n        console.log(scope.msg);\n        scope.$watch('msg.payload', function(data) {\n            console.log('Position 2');\n            console.dir(data);\n            //\n      \n        var figure = {\n        data: [{\n        type: 'bar',\n        marker: {color: 'red'},\n        y: data,\n        }],\n        layout:{\n        title: 'Quarterly Earnings'\n        }\n        };\n        \n        var template = Plotly.makeTemplate(figure);\n        \n        var newData = [{\n        type:'bar',\n        y:data\n        }]\n        \n        var layout = {template:template}\n        \n        Plotly.newPlot(graphDiv,newData,layout)\n///////\n\n\n\n        });\n    })(scope);\n    </script>\n\n\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 880,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "565e7c4d3fab2b8c",
+        "type": "inject",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 660,
+        "wires": [
+            [
+                "bbd76633eb53be78"
+            ]
+        ]
+    },
+    {
+        "id": "2186a258be8b9aa8",
+        "type": "comment",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "Exercise 8-4",
+        "info": "",
+        "x": 110,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "bbd76633eb53be78",
+        "type": "http request",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://rate.bot.com.tw/xrt?Lang=zh-TW",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 330,
+        "y": 660,
+        "wires": [
+            [
+                "f8d55657e379edea",
+                "b1a9414629c78e32"
+            ]
+        ]
+    },
+    {
+        "id": "f8d55657e379edea",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "b1a9414629c78e32",
+        "type": "html",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "USD cash",
+        "property": "payload",
+        "outproperty": "payload",
+        "tag": "#ie11andabove > div > table > tbody > tr:nth-child(1) > td:nth-child(2)",
+        "ret": "html",
+        "as": "single",
+        "x": 500,
+        "y": 660,
+        "wires": [
+            [
+                "ee9763f262f09045"
+            ]
+        ]
+    },
+    {
+        "id": "ee9763f262f09045",
+        "type": "debug",
+        "z": "3fab34f6aa92e94f",
+        "d": true,
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "92f0764028d914f9",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "d77f438001bfeed3",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d77f438001bfeed3",
+        "type": "ui_tab",
+        "name": "ex8-3",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
