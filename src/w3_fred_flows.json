@@ -1,0 +1,440 @@
+[
+    {
+        "id": "5230c72.fadcf38",
+        "type": "tab",
+        "label": "Sheet 1"
+    },
+    {
+        "id": "c0bf6402.d175a8",
+        "type": "inject",
+        "z": "5230c72.fadcf38",
+        "name": "Fire every 5 seconds",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 350,
+        "wires": [
+            [
+                "921d08ca.121d78"
+            ]
+        ]
+    },
+    {
+        "id": "921d08ca.121d78",
+        "type": "function",
+        "z": "5230c72.fadcf38",
+        "name": "Generate random number",
+        "func": "msg.payload = Math.round(Math.random()*100);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 440,
+        "y": 350,
+        "wires": [
+            [
+                "d03d8fff.136",
+                "92719f03.32a6c",
+                "c469569a.e204a8",
+                "187cb5bb.bf58d2",
+                "2107563.cb399aa"
+            ]
+        ]
+    },
+    {
+        "id": "d03d8fff.136",
+        "type": "ui_chart",
+        "z": "5230c72.fadcf38",
+        "name": "",
+        "group": "e638b37.019e95",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "label": "",
+        "chartType": "line",
+        "xformat": "%H:%M:%S",
+        "interpolate": "linear",
+        "nodata": "No Data",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "5",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 707,
+        "y": 352,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "92719f03.32a6c",
+        "type": "ui_gauge",
+        "z": "5230c72.fadcf38",
+        "name": "Gauge",
+        "group": "e638b37.019e95",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "gtype": "gage",
+        "title": "",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "x": 710,
+        "y": 396,
+        "wires": []
+    },
+    {
+        "id": "c469569a.e204a8",
+        "type": "ui_text",
+        "z": "5230c72.fadcf38",
+        "group": "e638b37.019e95",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "name": "Data output:",
+        "label": "",
+        "format": " {{msg.payload}}",
+        "layout": "",
+        "x": 710,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "b28712f8.be7bb",
+        "type": "ui_slider",
+        "z": "5230c72.fadcf38",
+        "name": "Use Slider to input values",
+        "label": "",
+        "tooltip": "",
+        "group": "e638b37.019e95",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "passthru": true,
+        "outs": "all",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": "100",
+        "step": "",
+        "x": 195,
+        "y": 393,
+        "wires": [
+            [
+                "921d08ca.121d78"
+            ]
+        ]
+    },
+    {
+        "id": "b9b76085.77f71",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "CLICK ME to read about these 3 demo flows",
+        "info": "These example flows are pre-built to \nshow you some of the features of Node-RED.\n\nThey are ready to run as is:\n\nClick the red deploy button top right and they\nwill be loaded onto the FRED cloud server and \nstart running\n\nEach flow has it's own comment node - double\nclick to find out more about the flow.\n\nFor more examples, check out the tutorials at:\n\nnoderedguide.com",
+        "x": 193,
+        "y": 33,
+        "wires": []
+    },
+    {
+        "id": "88a1ecc7.8415c",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Flow 2. A simple dashboard demo : click for more info",
+        "info": "This flow demonstrates the Node-RED UI nodes.\nYou can quickly build dashboards using the UI\nnodes, eg chart, guage etc..\n\nThe timestamp node 'triggers' the flow every \n5 seconds. It sends a message to the function \nnode which generates a random number \nbetween 0-99.\n\nThe number is then sent to three UI elements to\ndisplay it.\n\nTo view the Dashboard, open a browser window\nwith the URL: https://{your-username}.fred.sensetecnic.com/api/ui/\n\nWe've also added a slider, which you can use\nto generate a number on the UI which is then \nfed into the flow.\n\n",
+        "x": 251,
+        "y": 308,
+        "wires": []
+    },
+    {
+        "id": "96189c45.4257f",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Click deploy (top right) to start the flows",
+        "info": " Deploy allows you to launch the flows on \n the FRED server.\n \n You can switch between the info and debug\n tabs to the right of the flows. Info shows\n node information and debug is output from\n debug nodes.\n \nSelect info and then click on a node in a flow\nyou'll see info on the node",
+        "x": 534.5,
+        "y": 33,
+        "wires": []
+    },
+    {
+        "id": "67b8944d.f5d51c",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Flow 1. Using FRED as a web server - click for more info",
+        "info": "This flow shows how to use the http nodes in\nNode-RED to build a simple web server.\n\nOur web service will gather the latest stock market indexes from Google finance and return them as a JSON document.\n\nThe flow has an http input node that is \nconfigured to listen on the following URL:\n\n{your-username}.fred.sensetecnic.com/api/public/finance\n\nwhere you replace {your-username} with your FRED\naccount name.\n\nWhen a request comes in, the http input \nnode receives a message.  We save the HTTP request headers for later in the first function node, then send a message to the http request node.  This then queries Google finance for the latest data.  The flow then finds the data in the parse index html node.  The format data function node restores the headers and  adds the Index names (S&P, Dow, Nasdaq) and then sends the data onto a http response node that returns it to the browser.",
+        "x": 272,
+        "y": 86,
+        "wires": []
+    },
+    {
+        "id": "b382e0a5.2c69b",
+        "type": "html",
+        "z": "5230c72.fadcf38",
+        "name": "Parse indexes",
+        "tag": "td.bld span",
+        "ret": "html",
+        "as": "single",
+        "x": 583,
+        "y": 174,
+        "wires": [
+            [
+                "26168e32.ed6352"
+            ]
+        ]
+    },
+    {
+        "id": "1af4fe7e.7f59c2",
+        "type": "http request",
+        "z": "5230c72.fadcf38",
+        "name": "Get market data (Google)",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://www.google.com/finance",
+        "tls": "",
+        "x": 458,
+        "y": 135,
+        "wires": [
+            [
+                "b382e0a5.2c69b"
+            ]
+        ]
+    },
+    {
+        "id": "bf1aa3a0.7e82c",
+        "type": "http in",
+        "z": "5230c72.fadcf38",
+        "name": "/public/finance",
+        "url": "/public/finance",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 192,
+        "y": 135,
+        "wires": [
+            [
+                "9be2bab3.dd9658"
+            ]
+        ]
+    },
+    {
+        "id": "e6bb7752.978fc8",
+        "type": "http response",
+        "z": "5230c72.fadcf38",
+        "name": "Return indexes",
+        "x": 794,
+        "y": 174,
+        "wires": []
+    },
+    {
+        "id": "db9b0ddc.cfa",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "You can see this dashboard at: https://{your-username}.fred.sensetecnic.com/api/ui/",
+        "info": "Feel free to add another UI node to show the data\nin a differnt way.\n\nHow about connecting up a more interesting \nsource of data - perhaps the Google finance data\nthat is 'scraped' in the example above?\n\nOr perhaps your twitter feed, or an MQTT message or .....",
+        "x": 310,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a3b5fa76.48e148",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Try this by visiting: {your-username}.fred.sensetecnic.com/api/public/finance",
+        "info": "If you point your browser at:\n\n{your-username}.fred.sensetecnic.com/api/public/finance\n\nWhere you replace {your-username) with your FRED login name.\n\nYou'll get back a simple text string with the three main US\nindexes: S&P500, Dow & Nasdaq.\nTo improve on this flow, you could route the output to a chart to create a financial graph or ....",
+        "x": 353,
+        "y": 225,
+        "wires": []
+    },
+    {
+        "id": "26168e32.ed6352",
+        "type": "function",
+        "z": "5230c72.fadcf38",
+        "name": "Format data",
+        "func": "msg.headers = msg.originalHeaders;\n\nvar prices = msg.payload;\nvar newPayload = [];\nvar priceIndex = ['S&P','Dow','Nasdaq'];\nfor ( var i=0; i<prices.length; i++) {\n    newPayload.push({\n        index:priceIndex[i],\n        value:Number(prices[i].replace(/,/g,''))\n    });\n}\nmsg.payload = newPayload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 680,
+        "y": 136,
+        "wires": [
+            [
+                "e6bb7752.978fc8"
+            ]
+        ]
+    },
+    {
+        "id": "49ca065b.8dd878",
+        "type": "twitter in",
+        "z": "5230c72.fadcf38",
+        "twitter": "",
+        "tags": "canucks,MUFC",
+        "user": "false",
+        "name": "Tweets about sports teams",
+        "inputs": 0,
+        "x": 193.5,
+        "y": 572,
+        "wires": [
+            [
+                "7d310d12.53cf84",
+                "121b6e49.0a65b2"
+            ]
+        ]
+    },
+    {
+        "id": "7d310d12.53cf84",
+        "type": "ui_text",
+        "z": "5230c72.fadcf38",
+        "group": "e638b37.019e95",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "name": "Twitter feed:   ",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "x": 401.5,
+        "y": 613,
+        "wires": []
+    },
+    {
+        "id": "121b6e49.0a65b2",
+        "type": "debug",
+        "z": "5230c72.fadcf38",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 400.5,
+        "y": 573,
+        "wires": []
+    },
+    {
+        "id": "2b8fd6e5.ecd35a",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Tweets are also on the same dashboard: https://{your username}.fred.sensetecnic.com/api/ui/",
+        "info": "As you will have seen in the previous example, we've \nwired up the tweet feed to a text widget on the \nmain dashboard.\n\nYou could use a twitter output node to retweet, \nor you could email the tweets, or run a \nsentiment analysis on them - endless possibilities!",
+        "x": 355,
+        "y": 657,
+        "wires": []
+    },
+    {
+        "id": "21c7fc4a.63c954",
+        "type": "comment",
+        "z": "5230c72.fadcf38",
+        "name": "Flow 3. Capture & display tweets (needs to be configured)",
+        "info": "This flow captures tweets from the twittersphere\nand sends them to a debug node for diplay on\nthe debug panel (right side) and to the Dashboard\nused in example 2.\n\nThis example requires you to configure the twitter\nnode with your own twitter account details.\n\n- Double click the twitter node\n- Select add credentials\n- Follow the instructions to allow Node-RED to\naccess your account\n- Save and deploy\n- It takes a short time before tweets appear",
+        "x": 260,
+        "y": 529,
+        "wires": []
+    },
+    {
+        "id": "9be2bab3.dd9658",
+        "type": "function",
+        "z": "5230c72.fadcf38",
+        "name": "save original headers",
+        "func": "msg.originalHeaders = msg.headers;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 326,
+        "y": 175,
+        "wires": [
+            [
+                "1af4fe7e.7f59c2"
+            ]
+        ]
+    },
+    {
+        "id": "187cb5bb.bf58d2",
+        "type": "ui_template",
+        "z": "5230c72.fadcf38",
+        "group": "e638b37.019e95",
+        "name": "",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "<html>\n    <body>\n        <h1>This is s10828241's ex2-1</h1>\n        <p>My name is Dachuan-Chen</p>\n    </body>\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 700,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2107563.cb399aa",
+        "type": "ui_template",
+        "z": "5230c72.fadcf38",
+        "group": "e638b37.019e95",
+        "name": "",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "<!--Code from https://dev.to/code_mystery/simple-analog-clock-using-html-css-javascript-2c6a-->\n<!--\n<div class=\"clock\">\n\n</div>\nhtml {\n  background: #282828;\n  text-align: center;\n  font-size: 10px;\n}\n\nbody {\n  margin: 0;\n  font-size: 2rem;\n  display: flex;\n  flex: 1;\n  min-height: 100vh;\n  align-items: center;\n}\n\n.clock {\n  width: 30rem;\n  height: 30rem;\n  position: relative;\n  padding: 2rem;\n  border: 7px solid #282828;\n  box-shadow: -4px -4px 10px rgba(67,67,67,0.5),\n                inset 4px 4px 10px rgba(0,0,0,0.5),\n                inset -4px -4px 10px rgba(67,67,67,0.5),\n                4px 4px 10px rgba(0,0,0,0.3);\n  border-radius: 50%;\n  margin: 50px auto;\n\n}\n-->\n<!--https://www.industrialshields.com/blog/raspberry-pi-for-industry-26/post/node-red-tutorial-how-to-display-an-analog-clock-in-a-dashboard-444-->\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 710,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e638b37.019e95",
+        "type": "ui_group",
+        "z": "5230c72.fadcf38",
+        "name": "Dashboard Demo",
+        "tab": "84499b6b.8ac208",
+        "order": 1,
+        "disp": true,
+        "width": "10"
+    },
+    {
+        "id": "84499b6b.8ac208",
+        "type": "ui_tab",
+        "z": "5230c72.fadcf38",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": "1"
+    }
+]
