@@ -11,3 +11,6 @@ This repo contains code used in CYCUEE IoTP class.
 | src/node-red-execute-guide.txt | A guide to use "node_red.bat"                                   |
 | tex_generator.py               | Generate a tex file based on the photos inside the same folder. |
 | tex_generator.py               | Generate tex codes to include photos inside the same folder.    |
+
+!!NOTICE!!<br>
+"node_red.bat" is outdated, go to ["batch_executable/node_red.bat"](https://github.com/belongtothenight/batch_executable/blob/main/src/node_red.bat) for latest version.
