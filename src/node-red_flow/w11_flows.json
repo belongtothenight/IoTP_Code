@@ -86,7 +86,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 420,
+        "x": 440,
         "y": 160,
         "wires": []
     },
@@ -832,7 +832,7 @@
         "type": "comment",
         "z": "8b11b4b4b9dad6c2",
         "name": "ex10-5",
-        "info": "Token: CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6\nAPI: https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6\n\nIntro website: https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/%E8%A7%80%E6%B8%AC/get_v1_rest_datastore_O_A0001_001\n\nA0001-001: https://opendata.cwb.gov.tw/opendatadoc/DIV2/A0001-001.pdf\nA0007-001: https://opendata.cwb.gov.tw/opendatadoc/DIV3/A0007-001.pdf\n\nAccess online: https://discourse.nodered.org/t/accessing-node-red-dashboard-over-the-internet/37392/3\n\nFeatures:\n1. Option of \"location\" and \"WeatherElement\" are retrieved from return data, which is always going to be up to date.\n2. Provide current time.\n3. Provide data retrieve time.\n4. After selecting \"location\" and 'WeatherElement\", gauge below shows the retrieved data.\n5. Auto retrieve data every 10 seconds.\n6. Provide different data range accordingly.\n7. Provide different data unit accordingly.\n8. If data is unavailable, warning will be issued and display on dashboard as well.",
+        "info": "Token: CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6\nAPI: https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6\n\nIntro website: https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/%E8%A7%80%E6%B8%AC/get_v1_rest_datastore_O_A0001_001\n\nA0001-001: https://opendata.cwb.gov.tw/opendatadoc/DIV2/A0001-001.pdf\nA0007-001: https://opendata.cwb.gov.tw/opendatadoc/DIV3/A0007-001.pdf\n\nAccess online: https://discourse.nodered.org/t/accessing-node-red-dashboard-over-the-internet/37392/3\n\nFeatures:\n1. Option of \"location\" and \"WeatherElement\" are retrieved from return data, which is always going to be up to date.\n2. Retrieve data is identified by \"stationId\" rather than \"location\" since there are duplicates elements in \"location\".\n2. Provide current time.\n3. Provide data retrieve time.\n4. After selecting \"location\" and 'WeatherElement\", gauge below shows the retrieved data.\n5. Auto retrieve data every 10 seconds.\n6. Provide different data range accordingly.\n7. Provide different data unit accordingly.\n8. If data is unavailable, warning will be issued and display on dashboard as well.",
         "x": 70,
         "y": 940,
         "wires": []
@@ -917,18 +917,19 @@
         "id": "e9b6217d8a3bf15c",
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
-        "name": "get_locationName",
-        "func": "var location_data = msg.payload.records.location;\nvar data_length = location_data.length;\nvar location_name = [];\n\nfor (let index = 0; index < data_length; index++) {\n    location_name[index] = location_data[index].locationName;\n}\n\nmsg.payload = location_name;\nreturn msg;",
+        "name": "get_location_Data",
+        "func": "var location_data = msg.payload.records.location;\nvar data_length = location_data.length;\nvar location_name = [];\n\nfor (let index = 0; index < data_length; index++) {\n    var temp_locationName = location_data[index].locationName;\n    var temp_cityName = location_data[index].parameter[0].parameterValue;\n    var temp_townName = location_data[index].parameter[2].parameterValue;\n    var temp_stationId = location_data[index].stationId;\n    location_name[index] = { city: temp_cityName, town: temp_townName, location: temp_locationName, id: temp_stationId};\n}\n\nmsg.payload = location_name;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 850,
-        "y": 1060,
+        "y": 1040,
         "wires": [
             [
-                "eb5079cd97ce7301"
+                "eb5079cd97ce7301",
+                "aa939b0c945fece5"
             ]
         ]
     },
@@ -937,14 +938,14 @@
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
         "name": "generate_option",
-        "func": "var data = msg.payload;\nvar option = [];\nvar location = [];\n\nfor (let index = 0; index < data.length; index++) {\n    var temp = data[index];\n    var temp_obj = {};\n    temp_obj[temp] = temp;\n    option[index] = temp_obj;\n    location[index] = temp;\n}\n\nmsg.options = option;\nmsg.payload = location;\n// node.warn(msg.options);\nreturn msg;",
+        "func": "var data = msg.payload;\nvar option = [];\nvar location = [];\n\n// node.warn(data);\n\nfunction compare(a, b) {\n    var keya = Object.keys(a)[0];\n    var keyb = Object.keys(b)[0];\n    // node.warn(keya);\n    // node.warn(keya);\n    if ( keya < keyb ){\n        return -1;\n    } else if (keya > keyb ) {\n        return 1;\n    } else {\n        return 0;\n    }\n}\n\nfor (let index = 0; index < data.length; index++) {\n    var temp_id = data[index].id;\n    var temp_location = data[index].location;\n    var temp_name = data[index].city + '/' + data[index].town + '/'+ data[index].location;\n    var temp_obj = {};\n    temp_obj[temp_name] = temp_id;\n    option[index] = temp_obj;\n    location[index] = temp_location;\n}\n\noption = option.sort(compare);\n// node.warn(option);\n\nmsg.options = option;\nmsg.payload = location;\n// node.warn(msg.options);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 1070,
-        "y": 1060,
+        "y": 1040,
         "wires": [
             [
                 "6224c293f1b4150f",
@@ -966,23 +967,18 @@
         "height": 0,
         "passthru": false,
         "multiple": false,
-        "options": [
-            {
-                "label": "",
-                "value": "",
-                "type": "str"
-            }
-        ],
+        "options": [],
         "payload": "",
         "topic": "topic",
         "topicType": "msg",
         "className": "",
         "x": 1290,
-        "y": 1060,
+        "y": 1040,
         "wires": [
             [
-                "d3bc17222e56b3c3",
-                "fb4c4a0d2e87577d"
+                "a214e5d5117b9677",
+                "f9a72bf451b4800a",
+                "d3bc17222e56b3c3"
             ]
         ]
     },
@@ -995,12 +991,12 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "location",
+        "label": "Location",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "className": "",
         "x": 1480,
-        "y": 1060,
+        "y": 980,
         "wires": []
     },
     {
@@ -1008,7 +1004,7 @@
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
         "name": "extract_weatherElement_value",
-        "func": "var location_data = msg.payload.records.location;\nvar GlobalTemp = global.get('temp');\nvar location = GlobalTemp.location;\nvar weatherElement = GlobalTemp.weatherElement;\nvar GlobalRange = global.get('range');\nvar msg = {};\n\nfor (let i = 0; i < location_data.length; i++) {\n    var temp = location_data[i].locationName;\n    if (temp === location) {\n        // node.warn(temp)\n        var time = location_data[i].time.obsTime;\n        // node.warn(time);\n        var weatherElement_data = location_data[i].weatherElement;\n        for (let j = 0; j < weatherElement_data.length; j++) {\n            var temp = weatherElement_data[j].elementName;\n            if (temp === weatherElement) {\n                // node.warn(temp)\n                msg.payload = parseInt(weatherElement_data[j].elementValue);\n                msg.label = time;\n                if (temp === 'ELEV') {\n                    msg.ui_control = { min: 0, max: 3952 };\n                    msg.unit = 'meter';\n                } else if (temp === 'WDIR' || temp === 'H_XD') {\n                    msg.ui_control = { min: 0, max: 360 };\n                    msg.unit = 'angle';\n                } else if (temp === 'TEMP' || temp === 'D_TX' || temp === 'D_TN') {\n                    msg.ui_control = { min: -20, max: 45 };\n                    msg.unit = 'degree (°C)';\n                } else if (temp === 'HUMD') {\n                    msg.ui_control = { min: 0, max: 100 };\n                    msg.payload = parseFloat(weatherElement_data[j].elementValue);\n                    msg.payload = msg.payload * 100;\n                    msg.unit = 'g/kg';\n                } else if (temp === 'PRES') {\n                    msg.ui_control = { min: 950, max: 1050 };\n                    msg.unit = 'hpa';\n                } else if (temp === 'H_24R') {\n                    msg.ui_control = { min: 0, max: 3000 };\n                    msg.unit = 'millimeter'\n                } else if (temp === 'H_FX') {\n                    msg.ui_control = { min: 0, max: 61.3 };\n                    msg.unit = 'm/s'\n                } else {\n                    msg.ui_control = { min: 'N/A', max: 'N/A' };\n                }\n                if (msg.payload === -99) {\n                    msg.payload = 'Data Currently Unavailable';\n                    var warning = location + '/' + weatherElement + ' is unavailable currently.';\n                    node.warn(warning);\n                }\n                return msg;\n            }\n        }\n    }\n}",
+        "func": "var location_data = msg.payload.records.location;\nvar GlobalTemp = global.get('temp');\nvar location = GlobalTemp.location;\nvar stationId = GlobalTemp.stationId;\nvar weatherElement = GlobalTemp.weatherElement;\nvar GlobalRange = global.get('range');\nvar msg = {};\n\nfor (let i = 0; i < location_data.length; i++) {\n    var temp = location_data[i].stationId;\n    if (temp === stationId) {\n        // node.warn(temp)\n        var time = location_data[i].time.obsTime;\n        // node.warn(time);\n        var weatherElement_data = location_data[i].weatherElement;\n        for (let j = 0; j < weatherElement_data.length; j++) {\n            var temp = weatherElement_data[j].elementName;\n            if (temp === weatherElement) {\n                // node.warn(temp)\n                msg.payload = parseInt(weatherElement_data[j].elementValue);\n                msg.label = time;\n                if (temp === 'ELEV') {\n                    msg.ui_control = { min: 0, max: 3952 };\n                    msg.unit = 'meter';\n                } else if (temp === 'WDIR' || temp === 'H_XD') {\n                    msg.ui_control = { min: 0, max: 360 };\n                    msg.unit = 'angle';\n                } else if (temp === 'TEMP' || temp === 'D_TX' || temp === 'D_TN') {\n                    msg.ui_control = { min: -20, max: 45 };\n                    msg.unit = 'degree (°C)';\n                } else if (temp === 'HUMD') {\n                    msg.ui_control = { min: 0, max: 100 };\n                    msg.payload = parseFloat(weatherElement_data[j].elementValue);\n                    msg.payload = msg.payload * 100;\n                    msg.unit = 'g/kg';\n                } else if (temp === 'PRES') {\n                    msg.ui_control = { min: 950, max: 1050 };\n                    msg.unit = 'hpa';\n                } else if (temp === 'H_24R') {\n                    msg.ui_control = { min: 0, max: 3000 };\n                    msg.unit = 'millimeter'\n                } else if (temp === 'H_FX') {\n                    msg.ui_control = { min: 0, max: 61.3 };\n                    msg.unit = 'm/s'\n                } else {\n                    msg.ui_control = { min: 'N/A', max: 'N/A' };\n                }\n                if (msg.payload === -99) {\n                    msg.payload = 'Data Currently Unavailable';\n                    var warning = stationId + '/' + location + '/' + weatherElement + ' is unavailable currently.';\n                    node.warn(warning);\n                }\n                return msg;\n            }\n        }\n    }\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1027,14 +1023,14 @@
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
         "name": "set_location",
-        "func": "var GlobalTemp = global.get('temp');\nGlobalTemp.location = msg.payload;\nglobal.set('temp', GlobalTemp);\nreturn msg;",
+        "func": "var GlobalTemp = global.get('temp');\nGlobalTemp.location = msg.payload;\nnode.warn(msg.payload);\nglobal.set('temp', GlobalTemp);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1490,
-        "y": 1120,
+        "x": 1710,
+        "y": 1100,
         "wires": [
             [
                 "eb3fedb20c60ce71"
@@ -1046,7 +1042,7 @@
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
         "name": "init_global",
-        "func": "var GlobalTemp = {};\nGlobalTemp.api = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6';\nGlobalTemp.data = '';\nGlobalTemp.location = '';\nGlobalTemp.weatherElement = '';\nGlobalTemp.locationOption = '';\nGlobalTemp.weatherElementOption = '';\nglobal.set(\"temp\", GlobalTemp);\n\nmsg.url = GlobalTemp.api;\nreturn msg;",
+        "func": "var GlobalTemp = {};\nGlobalTemp.api = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6';\nGlobalTemp.data = '';\nGlobalTemp.location = ''; //deprecated\nGlobalTemp.stationId = '';\nGlobalTemp.weatherElement = '';\nGlobalTemp.locationOption = ''; //deprecated\nGlobalTemp.weatherElementOption = '';\nGlobalTemp.stationIdOption = '';\nglobal.set(\"temp\", GlobalTemp);\n\nmsg.url = GlobalTemp.api;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1132,7 +1128,7 @@
         "finalize": "",
         "libs": [],
         "x": 1290,
-        "y": 1120,
+        "y": 1100,
         "wires": [
             []
         ]
@@ -1141,7 +1137,7 @@
         "id": "b55ab2b437841431",
         "type": "function",
         "z": "8b11b4b4b9dad6c2",
-        "name": "get_weatherElementName",
+        "name": "get_weatherElement_Data",
         "func": "var weatherElement_data = msg.payload.records.location[0].weatherElement;\nvar weatherElementLength = weatherElement_data.length;\nvar weatherElementName = [];\n\nfor (let index = 0; index < weatherElementLength; index++) {\n    weatherElementName[index] = weatherElement_data[index].elementName;\n}\n\nmsg.payload = weatherElementName;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -1149,7 +1145,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "4e4af7f5c5b3816e"
@@ -1168,7 +1164,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "2c65a195eeeb9193",
@@ -1202,7 +1198,7 @@
         "topicType": "msg",
         "className": "",
         "x": 1320,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "42ad94eeb20bc2de",
@@ -1224,7 +1220,7 @@
         "layout": "row-spread",
         "className": "",
         "x": 1630,
-        "y": 1200,
+        "y": 1180,
         "wires": []
     },
     {
@@ -1239,7 +1235,7 @@
         "finalize": "",
         "libs": [],
         "x": 1380,
-        "y": 1260,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -1256,7 +1252,7 @@
         "finalize": "",
         "libs": [],
         "x": 1640,
-        "y": 1260,
+        "y": 1240,
         "wires": [
             [
                 "eb3fedb20c60ce71"
@@ -1444,7 +1440,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "0.1",
+        "repeat": "0.5",
         "crontab": "",
         "once": true,
         "onceDelay": 0.1,
@@ -1468,6 +1464,59 @@
         "x": 150,
         "y": 1220,
         "wires": []
+    },
+    {
+        "id": "a214e5d5117b9677",
+        "type": "function",
+        "z": "8b11b4b4b9dad6c2",
+        "name": "get_location",
+        "func": "var GlobalTemp = global.get('temp');\nvar locationOption = GlobalTemp.locationOption;\nvar stationIdOption = GlobalTemp.stationIdOption;\n\nnode.warn(msg.payload);\n\nfor (let index = 0; index < stationIdOption.length; index++) {\n    var temp = stationIdOption[index];\n    if (temp === msg.payload) {\n        GlobalTemp.location = locationOption[index];\n    }\n}\n\nglobal.set('temp', GlobalTemp);\n\nmsg.payload = GlobalTemp.location;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1490,
+        "y": 1040,
+        "wires": [
+            [
+                "fb4c4a0d2e87577d"
+            ]
+        ]
+    },
+    {
+        "id": "aa939b0c945fece5",
+        "type": "function",
+        "z": "8b11b4b4b9dad6c2",
+        "name": "set_stationIdOption",
+        "func": "var data = msg.payload;\nvar option = [];\n\nfor (let index = 0; index < data.length; index++) {\n    var temp = data[index];\n    option[index] = temp.id;\n}\n\nvar GlobalTemp = global.get('temp');\nGlobalTemp.stationIdOption = option;\nglobal.set('temp', GlobalTemp);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f9a72bf451b4800a",
+        "type": "function",
+        "z": "8b11b4b4b9dad6c2",
+        "name": "set_stationId",
+        "func": "var GlobalTemp = global.get('temp');\nGlobalTemp.stationId = msg.payload;\nglobal.set('temp', GlobalTemp);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1490,
+        "y": 1100,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "c74dbdec66489c20",
