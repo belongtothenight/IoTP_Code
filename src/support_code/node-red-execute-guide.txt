@@ -1,0 +1,15 @@
+=================================================================================
+Commands for executing node-red in CMD
+---------------------------------------------------------------------------------
+node --version && npm --version
+node-red
+start http://127.0.0.1:1880/
+
+
+=================================================================================
+Commands for executing batch file in CMD which execute node-RED and open website
+*folder "C:\bat\node_red.bat" is already added to system PATH variable
+---------------------------------------------------------------------------------
+node_red.bat
+
+

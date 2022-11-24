@@ -1,0 +1,546 @@
+[
+    {
+        "id": "90c2f3063fbfdd5c",
+        "type": "tab",
+        "label": "w7",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ca9f4e85b611bc61",
+        "type": "http in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "url": "/chat",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "c5cd65897b35a3c1"
+            ]
+        ]
+    },
+    {
+        "id": "c5cd65897b35a3c1",
+        "type": "template",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE HTML>\n<html>\n    <head>\n        <title>CHAT ROOM</title>\n    </head>\n    <body>\n        <div id=\"messages\">\n            <h1>chat room</h1>\n        </div>\n        <form>\n            <input type=\"text\" id=\"text\">\n        </form>\n        <p></p>\n        <button>Submit</button>\n        <p></p>\n        <div id=\"status\">unknown</div>\n    </body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 100,
+        "wires": [
+            [
+                "e246afb39585c036"
+            ]
+        ]
+    },
+    {
+        "id": "e246afb39585c036",
+        "type": "http response",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "54df100965d04ab8",
+        "type": "comment",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "Exercise 7-1",
+        "info": "",
+        "x": 110,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "9ff0948364ac1a66",
+        "type": "http response",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "3fc27422e7e04145",
+        "type": "template",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE HTML>\n<html>\n    <head>\n        <title>CHAT ROOM</title>\n        <script type=\"text/javascript\">\n            var ws;\n            var wsUri = \"wss:\";\n            var loc = window.location;\n            console.log(loc);\n            if (loc.protocol === \"http:\") {wsUri = \"ws:\";}\n            wsUri += \"//\" + loc.host + loc.pathname.replace(\"chat\", \"public/test\");\n            function wsConnect(){\n                console.log(\"connect\", wsUri);\n                ws = new WebSocket(wsUri);\n                ws.onmessage =function(msg){\n                    console.log(msg.data);\n                }\n                ws.onopen = function(){\n                    document.getElementById('status').innerHTML = \"connected\";\n                    console.log(\"connected\");\n                }\n                ws.onclose = function(){\n                    document.getElementById('status').innerHTML = \"not connected\";\n                    setTimeout(wsConnect, 3000);\n                }\n                ws.onerror = function(){\n                    document.getElementById('status').innerHTML = \"ERROR\";\n                    setTimeout(wsConnect, 3000);\n                }\n            }\n        </script>\n    </head>\n    <body onload=\"wsConnect()\" onunload=\"ws.onclose()\">\n        <div id=\"messages\">\n            <h1>chat room</h1>\n        </div>\n        <form>\n            <input type=\"text\" id=\"text\">\n        </form>\n        <p></p>\n        <button onclick=\"sendchat()\">Submit</button>\n        <p></p>\n        <div id=\"status\">unknown</div>\n    </body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 220,
+        "wires": [
+            [
+                "9ff0948364ac1a66"
+            ]
+        ]
+    },
+    {
+        "id": "d5138557c65bb374",
+        "type": "http in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "url": "/chat",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 220,
+        "wires": [
+            [
+                "3fc27422e7e04145"
+            ]
+        ]
+    },
+    {
+        "id": "94c94ec78884d750",
+        "type": "comment",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "Exercise 7-2",
+        "info": "",
+        "x": 110,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "fc75b3525732d0b2",
+        "type": "websocket in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "b35f6889530b956b"
+            ]
+        ]
+    },
+    {
+        "id": "b35f6889530b956b",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "89d027332f3446b7",
+        "type": "http response",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "afb93adf86669ece",
+        "type": "template",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE HTML>\n<html>\n    <head>\n        <title>CHAT ROOM</title>\n        <script type=\"text/javascript\">\n            var ws;\n            var wsUri = \"wss:\";\n            var loc = window.location;\n            console.log(loc);\n            if (loc.protocol === \"http:\") {wsUri = \"ws:\";}\n            wsUri += \"//\" + loc.host + loc.pathname.replace(\"chat\", \"public/test\");\n            function wsConnect(){\n                console.log(\"connect\", wsUri);\n                ws = new WebSocket(wsUri);\n                ws.onmessage =function(msg){\n                    console.log(msg.data);\n                }\n                ws.onopen = function(){\n                    document.getElementById('status').innerHTML = \"connected\";\n                    console.log(\"connected\");\n                }\n                ws.onclose = function(){\n                    document.getElementById('status').innerHTML = \"not connected\";\n                    setTimeout(wsConnect, 3000);\n                }\n                ws.onerror = function(){\n                    document.getElementById('status').innerHTML = \"ERROR\";\n                    setTimeout(wsConnect, 3000);\n                }\n            }\n            function sendchat(){\n                if (ws){\n                    ws.send(document.getElementById('text').value);\n                }\n            }\n        </script>\n    </head>\n    <body onload=\"wsConnect()\" onunload=\"ws.onclose()\">\n        <div id=\"messages\">\n            <h1>chat room</h1>\n        </div>\n        <form>\n            <input type=\"text\" id=\"text\">\n        </form>\n        <p></p>\n        <button onclick=\"sendchat()\">Submit</button>\n        <p></p>\n        <div id=\"status\">unknown</div>\n    </body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 420,
+        "wires": [
+            [
+                "89d027332f3446b7"
+            ]
+        ]
+    },
+    {
+        "id": "5d164802d09f88a8",
+        "type": "http in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "url": "/chat",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 420,
+        "wires": [
+            [
+                "afb93adf86669ece"
+            ]
+        ]
+    },
+    {
+        "id": "ec7a14f37a2c987b",
+        "type": "comment",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "Exercise 7-3",
+        "info": "",
+        "x": 110,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "143af228309752b9",
+        "type": "websocket in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "8dda71adbfc83c9d"
+            ]
+        ]
+    },
+    {
+        "id": "8dda71adbfc83c9d",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "2dee461a6caa67c5",
+        "type": "http response",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "4c9e52e4c5dcb99b",
+        "type": "template",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE HTML>\n<html>\n    <head>\n        <title>CHAT ROOM</title>\n        <script type=\"text/javascript\">\n            var ws;\n            var wsUri = \"wss:\";\n            var loc = window.location;\n            console.log(loc);\n            if (loc.protocol === \"http:\") {wsUri = \"ws:\";}\n            wsUri += \"//\" + loc.host + loc.pathname.replace(\"chat\", \"public/test\");\n            function wsConnect(){\n                console.log(\"connect\", wsUri);\n                ws = new WebSocket(wsUri);\n                ws.onmessage =function(msg){\n                    console.log(msg.data);\n                    var data = msg.data;\n                    var line = \"\";\n                    line += \"<p>\" + data + \"</p>\"\n                    document.getElementById('messages').innerHTML = document.getElementById('messages').innerHTML + line;\n                }\n                ws.onopen = function(){\n                    document.getElementById('status').innerHTML = \"connected\";\n                    console.log(\"connected\");\n                }\n                ws.onclose = function(){\n                    document.getElementById('status').innerHTML = \"not connected\";\n                    setTimeout(wsConnect, 3000);\n                }\n                ws.onerror = function(){\n                    document.getElementById('status').innerHTML = \"ERROR\";\n                    setTimeout(wsConnect, 3000);\n                }\n            }\n            function sendchat(){\n                if (ws){\n                    ws.send(document.getElementById('text').value);\n                }\n            }\n        </script>\n    </head>\n    <body onload=\"wsConnect()\" onunload=\"ws.onclose()\">\n        <div id=\"messages\">\n            <h1>chat room</h1>\n        </div>\n        <form>\n            <input type=\"text\" id=\"text\">\n        </form>\n        <p></p>\n        <button onclick=\"sendchat()\">Submit</button>\n        <p></p>\n        <div id=\"status\">unknown</div>\n    </body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 620,
+        "wires": [
+            [
+                "2dee461a6caa67c5"
+            ]
+        ]
+    },
+    {
+        "id": "19eaf18f5df09419",
+        "type": "http in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "url": "/chat",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 620,
+        "wires": [
+            [
+                "4c9e52e4c5dcb99b"
+            ]
+        ]
+    },
+    {
+        "id": "7f3473c135ccb43a",
+        "type": "comment",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "Exercise 7-4",
+        "info": "",
+        "x": 110,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "0cdd73dac2e007ac",
+        "type": "websocket in",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "4fb0697baa6d65fb",
+                "c938b29706504e65"
+            ]
+        ]
+    },
+    {
+        "id": "4fb0697baa6d65fb",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "c938b29706504e65",
+        "type": "function",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "create message",
+        "func": "var d = new Date();\nvar time = d.getHours() + \":\" + d.getMinutes() + \":\";\nvar chat = msg.payload;\nmsg.payload = time + \" \" + chat;\nreturn {payload:msg.payload};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 680,
+        "wires": [
+            [
+                "3985b3a07928eb9b",
+                "2e8d9d43137e2e57"
+            ]
+        ]
+    },
+    {
+        "id": "3985b3a07928eb9b",
+        "type": "websocket out",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 560,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "2e8d9d43137e2e57",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "d": true,
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "c365b8cd8f2f9573",
+        "type": "http response",
+        "z": "90c2f3063fbfdd5c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "c6cace9368a14b59",
+        "type": "template",
+        "z": "90c2f3063fbfdd5c",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE HTML>\n<html>\n    <head>\n        <style>\n        h1 {text-align: center;}\n        p {text-align: center;}\n        div {text-align: center;}\n        form {text-align: center;}\n        body {text-align: center;}\n        </style>\n        <title>CHAT ROOM</title>\n        <script type=\"text/javascript\">\n            var ws;\n            var wsUri = \"wss:\";\n            var loc = window.location;\n            console.log(loc);\n            if (loc.protocol === \"http:\") {wsUri = \"ws:\";}\n            wsUri += \"//\" + loc.host + loc.pathname.replace(\"chat\", \"public/test\");\n            function wsConnect(){\n                console.log(\"connect\", wsUri);\n                ws = new WebSocket(wsUri);\n                ws.onmessage =function(msg){\n                    console.log(msg.data);\n                    var data = msg.data;\n                    var line = \"\";\n                    line += \"<p>\" + data + \"</p>\"\n                    document.getElementById('messages').innerHTML = document.getElementById('messages').innerHTML + line;\n                }\n                ws.onopen = function(){\n                    document.getElementById('status').innerHTML = \"status: connected\";\n                    console.log(\"connected\");\n                }\n                ws.onclose = function(){\n                    document.getElementById('status').innerHTML = \"status: not connected\";\n                    setTimeout(wsConnect, 3000);\n                }\n                ws.onerror = function(){\n                    document.getElementById('status').innerHTML = \"status: ERROR\";\n                    setTimeout(wsConnect, 3000);\n                }\n            }\n            function sendchat(){\n                if (ws){\n                    ws.send(\n                        document.getElementById('user_id').value + \n                        \" \" + \n                        document.getElementById('user_msg').value\n                        );\n                }\n            }\n        </script>\n    </head>\n    <body onload=\"wsConnect()\" onunload=\"ws.onclose()\">\n        <div id=\"messages\">\n            <h1>Chat Room</h1>\n        </div>\n        <br><p></p>\n        <div id=\"status\">unknown</div>\n        <p></p>\n        <form>\n            <label for=\"user_id\">ID:</label>\n            <input type=\"text\" id=\"user_id\">\n            <label for=\"user_msg\">Message:</label>\n            <input type=\"text\" id=\"user_msg\">\n        </form>\n        <p></p>\n        <button onclick=\"sendchat()\">Submit</button>\n    </body>\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 860,
+        "wires": [
+            [
+                "c365b8cd8f2f9573"
+            ]
+        ]
+    },
+    {
+        "id": "371f21a4e6c5a87d",
+        "type": "http in",
+        "z": "90c2f3063fbfdd5c",
+        "name": "",
+        "url": "/chat",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 860,
+        "wires": [
+            [
+                "c6cace9368a14b59"
+            ]
+        ]
+    },
+    {
+        "id": "242493d77ee111d5",
+        "type": "comment",
+        "z": "90c2f3063fbfdd5c",
+        "name": "Exercise 7-5",
+        "info": "",
+        "x": 110,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "51b12888c05c72d7",
+        "type": "websocket in",
+        "z": "90c2f3063fbfdd5c",
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 160,
+        "y": 920,
+        "wires": [
+            [
+                "bc18557d93f4822c",
+                "584abf42ba821a39"
+            ]
+        ]
+    },
+    {
+        "id": "bc18557d93f4822c",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "584abf42ba821a39",
+        "type": "function",
+        "z": "90c2f3063fbfdd5c",
+        "name": "create message",
+        "func": "var d = new Date();\nvar time = d.getHours() + \":\" + d.getMinutes();\nvar chat = msg.payload.split(' ');\nmsg.payload = time + \" \" + chat[0] + \": \" + chat[1];\nreturn {payload:msg.payload};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 920,
+        "wires": [
+            [
+                "8dadcd80ba9b3ddf",
+                "ee8428a7f651cb49"
+            ]
+        ]
+    },
+    {
+        "id": "8dadcd80ba9b3ddf",
+        "type": "websocket out",
+        "z": "90c2f3063fbfdd5c",
+        "name": "",
+        "server": "48e352ea45acb63f",
+        "client": "",
+        "x": 560,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "ee8428a7f651cb49",
+        "type": "debug",
+        "z": "90c2f3063fbfdd5c",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "48e352ea45acb63f",
+        "type": "websocket-listener",
+        "path": "/public/test",
+        "wholemsg": "false"
+    }
+]
