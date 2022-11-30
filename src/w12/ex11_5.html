@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>local json</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <h3>隢钅��箔��衤�銋梶��𦠜�蝝����</h3>
+    <form class="md-form">
+        <div class="file-field">
+            <div class="btn btn-primary btn-sm float-left">
+                <span>select *.json data file</span>
+                <input type="file" id="input-data">
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('input-data').addEventListener('change', readInputFile, false);
+        function readInputFile(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function (e) {
+                var contents = e.target.result;
+                // document.getElementById("input-data").value = "";
+                // parseJSONData(contents);
+                var obj = JSON.parse(contents);
+                console.log(obj);
+                shuffleData(obj);
+            };
+
+        }
+
+        function shuffleData(obj) {
+
+            var data = [];
+            var shuffle_data = [];
+            var i = 0;
+            //   console.log(obj.ys);
+            obj.xs.forEach((values) => {
+                // 'logit' data uses the 5 fields:
+                //  const xx = [];
+                // const yy=[];
+
+
+                data.push({ x: obj.xs[i], y: obj.ys[i] });
+                //    xs.push(x);
+                //       ys.push(yy);
+                i++;
+
+            });
+
+            console.log(data);
+
+            shuffle_data = [...data];
+
+            tf.util.shuffle(shuffle_data);
+
+            console.log("shuffle data:");
+            console.log(shuffle_data);
+
+            convertToTensor(shuffle_data);
+
+        }//end function
+
+        async function convertToTensor(data) {
+            var x_avgs = [];
+            var y_avgs = [];
+            data.forEach((values) => {
+                // 'logit' data uses the 5 fields:
+                const yn = [];
+                x_avgs.push(values.x);
+                // The label is simply 'is strike' or 'is ball':
+                //    const y = parseInt(values.Outcome, 10);
+                // yn.push(values.y);
+                y_avgs.push(values.y);
+
+            });
+
+            console.log(x_avgs);
+
+            console.log(y_avgs);
+
+
+
+            var size = x_avgs.length;
+            console.log(size);
+            const txs = tf.tensor2d(x_avgs, [size, 6]);
+            //頧㗇� x_avgs�𡺉f.tensor2d嚗���� txs
+            console.log("txs=");
+            //�牢onsole閬𣇉�憿舐內 "txs="
+            txs.print();
+            //�啣枂txs
+            const tys = tf.tensor2d(y_avgs, [y_avgs.length, 3]);
+            //頧㗇�ys�𡺉f.tensor2d嚗���𡺉ys
+
+            console.log("tys=");         // �牢onsole閬𣇉�憿舐內 "tys="
+            tys.print();                //�啣枂tys
+
+            model = tf.sequential();
+
+            model.add(tf.layers.dense({ units: 64, activation: 'relu', inputShape: [6] })); //input is a 1x8
+            //model.add(tf.layers.dense({units: 256, inputShape: [8]}));
+            model.add(tf.layers.dropout(0.5));
+            model.add(tf.layers.dense({ units: 64, activation: 'relu' }));
+            model.add(tf.layers.dropout(0.5));
+            model.add(tf.layers.dense({ units: 3, activation: 'softmax' })); //returns a 1x3
+            console.log('model created');
+
+
+            // set optimiser and compile model
+            const learningRate = 0.001;
+            const optimizer = tf.train.adam(learningRate);
+            //  model.compile({loss: 'meanSquaredError', optimizer: optimizer, metrics: ['accuracy']}); categorical_crossentropy
+            model.compile({ loss: 'categoricalCrossentropy', optimizer: optimizer, metrics: ['accuracy'] });
+            console.log('compile finished');
+
+            // Train the model
+
+            model.summary();
+
+            await model.fit(txs, tys, {
+                batchSize: 10,
+                //	validationSplit:0.15,
+                epochs: 100,
+
+                callbacks: {
+
+                    onEpochEnd: async (epoch, logs) => {
+
+                        console.log(epoch + ':' + logs.loss);
+
+                    }
+                }
+            });
+
+
+            await model.save('indexeddb://my-model-ping-pong-3000');
+
+            console.log("save model my-model-ping-pong-3000");
+
+
+
+
+
+
+
+            tys.dispose();             //�𧢲𦆮閮䀹�擃�
+
+            txs.dispose();  //�𧢲𦆮閮䀹�擃�
+
+
+
+
+
+
+
+
+
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
