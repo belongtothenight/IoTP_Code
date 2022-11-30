@@ -12,16 +12,17 @@ This repo contains code used in CYCUEE IoTP class.
 | src/support_code/tex_generator.py           | Generate a tex file based on the photos inside the same folder.    |
 | src/support_code/tex_generator.py           | Generate tex codes to include photos inside the same folder.       |
 | src/midterm_flow/                           | Voting system, dynamic stock market index.                         |
-| src/w1_flow/                                | Startup.                                                           |
-| src/w2_flow/                                | Dashboard, firebase startup.                                       |
-| src/w3_flow/                                | JSON operation, firebase operation.                                |
-| src/w4_flow/                                | Firebase operation, crypto-js startup.                             |
-| src/w5_flow/                                | Crypto-js operation.                                               |
-| src/w6_flow/                                | Network-http operation, voting system.                             |
-| src/w7_flow/                                | HTML, network-websocket server, chat room.                         |
-| src/w8_flow/                                | Nasdaq stock data, currency data.                                  |
-| src/w10_flow/                               | PocketCard, ESP32, webserver, LDR.                                 |
-| src/w11_flow/                               | WeatherStack, Taiwan Central Weather Bureau opendata platform API. |
+| src/w1/                                     | Startup.                                                           |
+| src/w2/                                     | Dashboard, firebase startup.                                       |
+| src/w3/                                     | JSON operation, firebase operation.                                |
+| src/w4/                                     | Firebase operation, crypto-js startup.                             |
+| src/w5/                                     | Crypto-js operation.                                               |
+| src/w6/                                     | Network-http operation, voting system.                             |
+| src/w7/                                     | HTML, network-websocket server, chat room.                         |
+| src/w8/                                     | Nasdaq stock data, currency data.                                  |
+| src/w10/                                    | PocketCard, ESP32, webserver, LDR.                                 |
+| src/w11/                                    | WeatherStack, Taiwan Central Weather Bureau opendata platform API. |
+| src/w12/                                    | TensorFlow JS, pong game.                                          |
 
 !!NOTICE!!<br>
 "node_red.bat" is deprecated, go to ["batch_executable/node_red.bat"](https://github.com/belongtothenight/batch_executable/blob/main/src/node_red.bat) for latest version.
