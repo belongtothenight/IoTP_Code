@@ -13,4 +13,4 @@
 | 7   | ex11_7.html        | main, launch "ex11_7.js".                                                                                           |
 |     | ex11_7.js          | sub, from [GitHub/GDGDDevFest](https://raw.githubusercontent.com/AbhimanyuAryan/GDGDevFest/master/pong/ponggame.js) |
 
-need to play ex11_4.html until the traiining data is downloaded.
+need to play ex11_4.html until the training data is downloaded.
