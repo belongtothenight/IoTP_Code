@@ -1,0 +1,274 @@
+<html>
+
+<head>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@4.3.0/build/vega.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc10/build/vega-lite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.24.1/build/vega-embed.js"></script>
+
+    <script type="text/javascript" src="https://unpkg.com/vis-graph3d@latest/dist/vis-graph3d.min.js"></script>
+
+
+</head>
+
+<body>
+    <h3> Linear Regression </h3>
+    <div id="vis1"> </div>
+    <div id="vis2"> </div>
+    <div id="vis3"> </div>
+
+    <script>
+
+        var data3d = new vis.DataSet();
+
+        function drawVisualizationdot(containerid, datadot) {
+
+            var options = {
+                width: '600px',
+                height: '600px',
+                style: 'dot-color',
+                showPerspective: true,
+                showGrid: true,
+                keepAspectRatio: true,
+                verticalRatio: 1.0,
+                cameraPosition: {
+                    horizontal: -0.5,
+                    vertical: 0.22,
+                    distance: 1.8
+                }
+            };
+            // create our graph
+            var container = document.getElementById(containerid);
+            graph = new vis.Graph3d(container, datadot, options);
+        }
+
+        var lossarray = [];
+        var epocharray = [];
+
+        function plotloss(container, loss, epoch) {
+
+            lossarray.push(loss);
+
+            epocharray.push(epoch);
+
+            const values = Array.from(lossarray).map((x, i) => {
+                return { 'epoch': epocharray[i], 'loss': lossarray[i] };
+
+            });
+
+            const spec = {
+                '$schema': 'https://vega.github.io/schema/vega-lite/v3.json',
+                'width': 300,
+                'height': 300,
+                'data': { 'values': values },
+                'layer': [
+                    {
+                        'mark': 'line',
+                        'encoding': {
+                            'x': { 'field': 'epoch', 'type': 'quantitative' },
+                            'y': { 'field': 'loss', 'type': 'quantitative' }
+                        }
+                    }
+
+                ]
+            };
+            return vegaEmbed(container, spec); //
+
+        } //end of plotloss
+
+
+
+        function plotData2(container, xs, ys, xspreds, yspreds) {
+
+            const values = Array.from(xs).map((x, i) => {
+                return { 'x': xs[i], 'y': ys[i], 'xpred': xspreds[i], 'ypred': yspreds[i] };
+
+            });
+
+            //
+            const spec = {
+                '$schema': 'https://vega.github.io/schema/vega-lite/v3.json',
+                'width': 300,
+                'height': 300,
+                'data': { 'values': values },
+                'layer': [
+                    {
+                        'mark': 'point',
+                        'encoding': {
+                            'x': { 'field': 'x', 'type': 'quantitative' },
+                            'y': { 'field': 'y', 'type': 'quantitative' }
+                        }
+                    },
+                    {
+                        'mark': 'line',
+                        'encoding': {
+                            'x': { 'field': 'xpred', 'type': 'quantitative' },
+                            'y': { 'field': 'ypred', 'type': 'quantitative' },
+                            'color': { 'value': 'tomato' }
+                        }
+                    }
+                ]
+            };
+            return vegaEmbed(container, spec); //
+
+        } // end of plotData2
+
+
+        function generateXYData(coeffs) {
+            const datax = [];
+            const datay = [];
+            for (var x = 0; x < 1; x += 0.01) //0.01
+            {
+                datax.push(x);        //datax
+
+                let y = coeffs[0] * x + coeffs[1] * (1 + Math.random());  //
+                datay.push(y);    //datay
+            }
+            //   plotData1("#vis1", datax,datay); 
+
+            return [datax, datay];
+        }//end of generateXYData 
+
+
+        var model = [];
+
+
+        async function fitting(x, y) {
+
+
+            model = tf.sequential();//  
+
+            model.add(tf.layers.dense({ units: 1, inputShape: [2], useBias: false }));
+
+
+            const learningRate = 0.01;
+            const sgd = tf.train.sgd(learningRate);
+            //'meanSquaredError
+            model.compile({ optimizer: sgd, loss: 'meanSquaredError' });
+
+
+            //
+            const nVx = x;      //
+            console.log('nVx=', nVx);  //
+            const nVy = y;   //y
+            console.log('nVy=', nVy);
+
+
+            const xArrayData = [];
+            // 
+            for (let i = 0; i < nVx.length; ++i) {
+                xArrayData.push(1);
+                xArrayData.push(nVx[i]);
+
+            }
+            console.log('xArrayData=', xArrayData);
+
+            //
+            const xtensor = tf.tensor2d(xArrayData, [nVx.length, 2]);
+
+            xtensor.print();//xtensor
+
+            const ytensor = tf.tensor2d(nVy, [nVy.length, 1]);
+
+            ytensor.print();//ytensor
+
+
+            //
+            const batchSize = 10;
+            const epochs = 200;
+            await model.fit(xtensor, ytensor, {
+                batchSize: batchSize,
+                epochs: epochs,
+                callbacks: {
+                    // onEpochEnd: async (epoch, log) => { monitor(epoch, log); }}
+                    onEpochEnd: async (epoch, log) => {
+                        console.log(epoch), console.log(log.loss); Prediction(x);
+                        plotloss("#vis2", log.loss, epoch);
+                        var W = Array.from(model.trainableWeights[0].read().dataSync());
+                        var style = log.loss;
+
+                        data3d.add({ x: W[0], y: W[1], z: log.loss, style: style });
+
+                        drawVisualizationdot("vis3", data3d);
+
+                    }
+                }
+            });
+
+
+            console.log('Model weights (normalized):', Array.from(model.trainableWeights[0].read().dataSync()));
+
+
+            //release GPU memory
+
+            xtensor.dispose();
+            ytensor.dispose();
+
+            Prediction(x);
+
+            model.summary();
+        } // end of fitting
+
+
+        async function Prediction(x) {
+            const nVx = x;
+            console.log('nVx=', nVx);
+
+
+            const xArrayData = []; //xArrayData
+
+            // 1, nVx_1, ...., 1, nVx_n, 
+            for (let i = 0; i < nVx.length; ++i) {
+                xArrayData.push(1);
+                xArrayData.push(nVx[i]);
+            }
+            console.log('xArrayData=', xArrayData);
+
+
+            const xtensor = tf.tensor2d(xArrayData, [nVx.length, 2]);
+
+            xtensor.print();//xtensor
+
+
+
+            const predictOut = await model.predict(xtensor);
+
+            Ysfinal = predictOut.dataSync();
+            console.log('Ysfinal =', Ysfinal);
+
+            //  console.log('Yoriginal=', xyData[1]);
+
+            predictOut.dispose();//release GPU memory
+            xtensor.dispose();//release GPU memory
+            plotData2("#vis1", xyData[0], xyData[1], xyData[0], Ysfinal);
+
+
+
+        }
+
+
+
+
+        var xyData = []; //xyData
+
+
+        function process() {
+            const coeffs = [1, 0.1]; //y=ax+b    a=1  b=0.1
+            xyData = generateXYData(coeffs); //generateXYData
+            console.log(xyData);  //
+            var datax = xyData[0];
+            var datay = xyData[1];
+
+
+            fitting(datax, datay);  //fitting
+
+        } //end of process 
+
+        process(); //call process
+
+
+    </script>
+</body>
+
+</html>
