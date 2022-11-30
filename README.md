@@ -3,6 +3,7 @@
 ![Repo Size](https://img.shields.io/github/repo-size/belongtothenight/IoTP_Code) ![Code Size](https://img.shields.io/github/languages/code-size/belongtothenight/IoTP_Code) ![Commit Per Month](https://img.shields.io/github/commit-activity/m/belongtothenight/IoTP_Code)
 
 This repo contains code used in CYCUEE IoTP class.
+!!Make Sure to send me DM if you need to use this.!!
 
 | Directory/File                              | Description                                                        |
 | ------------------------------------------- | ------------------------------------------------------------------ |
