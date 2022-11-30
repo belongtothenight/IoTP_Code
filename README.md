@@ -2,8 +2,18 @@
 
 ![Repo Size](https://img.shields.io/github/repo-size/belongtothenight/IoTP_Code) ![Code Size](https://img.shields.io/github/languages/code-size/belongtothenight/IoTP_Code) ![Commit Per Month](https://img.shields.io/github/commit-activity/m/belongtothenight/IoTP_Code)
 
-This repo contains code used in CYCUEE IoTP class.
-!!Make Sure to send me DM if you need to use this.!!
+This repo contains code used in CYCUEE IoTP class.<br>
+
+## Source
+
+!!Since I'm not the author of some of the content, make sure to content them in advance before using them.!!<br>
+
+| Author                    | E-Mail/Link                                    | Files                                    |
+| ------------------------- | ---------------------------------------------- | ---------------------------------------- |
+| Prof. 廖裕評 Yu-Ping Liao | lyp@cycu.edu.tw                                | All the pdf files with mandarin content. |
+| AbhimanyuAryan            | <https://github.com/AbhimanyuAryan/GDGDevFest> | src/w12/ex11_7_pong_game.js              |
+
+## Files
 
 | Directory/File                              | Description                                                        |
 | ------------------------------------------- | ------------------------------------------------------------------ |
