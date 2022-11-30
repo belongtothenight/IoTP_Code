@@ -36,3 +36,4 @@ This repo contains code used in CYCUEE IoTP class.<br>
 
 !!NOTICE!!<br>
 "node_red.bat" is deprecated, go to ["batch_executable/node_red.bat"](https://github.com/belongtothenight/batch_executable/blob/main/src/node_red.bat) for latest version.
+path to "settings.js": %appdata%\Roaming\SPB_Data\.node-red\settings.js
