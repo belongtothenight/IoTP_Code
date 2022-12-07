@@ -1,11 +1,14 @@
+import os
 import json
 import numpy as np
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-import tensorflowjs as tfjs
+import tensorflow as tf
 
-with open('training_data-10k.json') as f:
+os.system('cls')
+
+with open('training_data-100k.json') as f:
     data = json.load(f)
     xs = np.array(data['xs'])
     ys = np.array(data['ys'])
@@ -34,5 +37,5 @@ model.fit(x_train, y_train,
 
 score = model.evaluate(x_test, y_test, batch_size=128)
 print(score)
-model.save("Keras-64x2-10epoch")
-tfjs.converters.save_keras_model(model, "tfjsv3")
+model.save("Keras-64x2-50epoch")
+# tf.converters.save_keras_model(model, "tfv3_64x2_50epoch")
