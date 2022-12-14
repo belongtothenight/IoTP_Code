@@ -33,6 +33,8 @@ This repo contains code used in CYCUEE IoTP class.<br>
 | [src/w10/](https://github.com/belongtothenight/IoTP_Code/tree/main/src/w10)                   | PocketCard, ESP32, webserver, LDR.                                 |
 | [src/w11/](https://github.com/belongtothenight/IoTP_Code/tree/main/src/w11)                   | WeatherStack, Taiwan Central Weather Bureau opendata platform API. |
 | [src/w12/](https://github.com/belongtothenight/IoTP_Code/tree/main/src/w12)                   | TensorFlow JS, pong game.                                          |
+| [src/w13/](https://github.com/belongtothenight/IoTP_Code/tree/main/src/w13)                   | TensorFlow Python, pong game.                                      |
+| [src/w14/](https://github.com/belongtothenight/IoTP_Code/tree/main/src/w14)                   | Firebase hosting, openssl.                                         |
 
 !!NOTICE!!<br>
 "node_red.bat" is deprecated, go to ["batch_executable/node_red.bat["](https://github.com/belongtothenight/batch_executable/blob/main/src/node_red.bat) for the latest version.
