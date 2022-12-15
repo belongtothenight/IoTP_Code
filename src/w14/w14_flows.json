@@ -1,0 +1,356 @@
+[
+    {
+        "id": "3304e97eea107f80",
+        "type": "tab",
+        "label": "w14",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "04df1a47b9a80d34",
+        "type": "comment",
+        "z": "3304e97eea107f80",
+        "name": "ex13-4",
+        "info": "",
+        "x": 90,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "df271cba9d6252ff",
+        "type": "inject",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "f63e49807361b312"
+            ]
+        ]
+    },
+    {
+        "id": "414e94a020b62fb7",
+        "type": "inject",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "acf1cc4d6bb7c854"
+            ]
+        ]
+    },
+    {
+        "id": "0dafd239f612dbad",
+        "type": "inject",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "fbf417626eb060b5"
+            ]
+        ]
+    },
+    {
+        "id": "7ea8099ad3ef3cb0",
+        "type": "inject",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 540,
+        "wires": [
+            [
+                "7b6909dea202a2ba"
+            ]
+        ]
+    },
+    {
+        "id": "f63e49807361b312",
+        "type": "exec",
+        "z": "3304e97eea107f80",
+        "command": "openssl genrsa -out yourdomain.key 2048",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 390,
+        "y": 140,
+        "wires": [
+            [
+                "d8c875ef6b6eee5c"
+            ],
+            [
+                "2c405f5092ec3191"
+            ],
+            [
+                "ac0e7074abb673c2"
+            ]
+        ]
+    },
+    {
+        "id": "acf1cc4d6bb7c854",
+        "type": "file in",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "filename": "yourdomain.key",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 300,
+        "y": 280,
+        "wires": [
+            [
+                "ee7f7e33c08af4b1"
+            ]
+        ]
+    },
+    {
+        "id": "fbf417626eb060b5",
+        "type": "exec",
+        "z": "3304e97eea107f80",
+        "command": "openssl rsa -in yourdomain.key -pubout -out yourdomain_public.key",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "3c8921f34f8914a9"
+            ],
+            [
+                "fcaf7c697bc04a91"
+            ],
+            [
+                "09921fd30bc46882"
+            ]
+        ]
+    },
+    {
+        "id": "7b6909dea202a2ba",
+        "type": "file in",
+        "z": "3304e97eea107f80",
+        "name": "",
+        "filename": "yourdomain_public.key",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 330,
+        "y": 540,
+        "wires": [
+            [
+                "c119a109455f686c"
+            ]
+        ]
+    },
+    {
+        "id": "d8c875ef6b6eee5c",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "2c405f5092ec3191",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ac0e7074abb673c2",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ee7f7e33c08af4b1",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "3c8921f34f8914a9",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "fcaf7c697bc04a91",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "09921fd30bc46882",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c119a109455f686c",
+        "type": "debug",
+        "z": "3304e97eea107f80",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 540,
+        "wires": []
+    }
+]
