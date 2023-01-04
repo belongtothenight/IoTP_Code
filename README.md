@@ -12,6 +12,8 @@ This repo contains code used in CYCUEE IoTP class.<br>
 | ------------------------- | ---------------------------------------------- | ---------------------------------------------------------------- |
 | Prof. 廖裕評 Yu-Ping Liao | lyp@cycu.edu.tw                                | All the pdf files with mandarin content + html files in src/w12/ |
 | AbhimanyuAryan            | <https://github.com/AbhimanyuAryan/GDGDevFest> | src/w12/ex11_7_pong_game.js                                      |
+| mdn web docs              | <<https://github.com/mdn>                      | src/w16/*                                                        |
+
 
 ## Files
 
