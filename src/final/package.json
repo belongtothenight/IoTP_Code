@@ -1,19 +1,12 @@
 {
-  "name": "main",
+  "name": "final",
   "version": "1.0.0",
   "description": "1. Data retrieved from Taiwan Central Weather Bureau Opendata Platform API.\r 2. Speake current and forecast weather info. (based on user GPS location)",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://belongtothenight/IoTP_Code.git"
-  },
-  "author": "Dachuan-Chen",
+  "author": "",
   "license": "Apache-2.0"
 }
