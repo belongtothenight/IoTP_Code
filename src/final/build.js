@@ -34,8 +34,8 @@ function copyFiles(src, dst) {
 }
 
 // 1. move all files
-let path1 = "/webpage/";
-let path2 = "/public/";
+let path1 = "/src/final/webpage/";
+let path2 = "/src/final/public/";
 copyFiles(path1, path2);
 
 // 2. check files
