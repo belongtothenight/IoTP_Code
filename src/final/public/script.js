@@ -1,4 +1,12 @@
+import DataRetrieve from './dataRetrieve.js';
+
 document.addEventListener('DOMContentLoaded', function () {
+    initFirebase();
+    var value = new DataRetrieve();
+    console.log(value);
+});
+
+function initFirebase() {
     const loadEl = document.querySelector('#load');
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
     // // The Firebase SDK is initialized and available here!
@@ -16,24 +24,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
     try {
-        let app = firebase.app();
-        let features = [
-            'auth',
-            'database',
-            'firestore',
-            'functions',
-            'messaging',
-            'storage',
-            'analytics',
-            'remoteConfig',
-            'performance',
-        ].filter(feature => typeof app[feature] === 'function');
-        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        // let app = firebase.app();
+        // let features = [
+        //     'auth',
+        //     'database',
+        //     'firestore',
+        //     'functions',
+        //     'messaging',
+        //     'storage',
+        //     'analytics',
+        //     'remoteConfig',
+        //     'performance',
+        // ].filter(feature => typeof app[feature] === 'function');
+        // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        loadEl.textContent = 'Hello from Firebase!';
     } catch (e) {
         console.error(e);
         loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     }
-    console.log('Hello from Firebase!');
-});
+    // console.log('Hello from Firebase!');
+}
 
-console.log('Hello from Firebase!');
+function routine() {
+    console.log('Hello from Firebase!');
+}
