@@ -17,3 +17,9 @@ bootstrap vue
 gitlab?
 
 <https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/>
+
+## Develop Steps
+
+1. cmd "cd" to folder "public".
+2. cmd "reload" to locally host the website.
+3. start to develop with MS Edge DevTools.
