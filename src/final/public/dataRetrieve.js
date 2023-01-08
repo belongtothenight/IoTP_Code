@@ -30,8 +30,11 @@ export default class DataRetrieve {
         }
     }
 
-    _requestAPI() {
+    _requestAPI(apiLink, token) {
         console.log('requestAPI');
+        const fullLink = apiLink + token;
+        console.log(fullLink);
+        fetch(fullLink)
     }
 
 };
