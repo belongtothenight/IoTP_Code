@@ -1,9 +1,10 @@
-import DataRetrieve from './dataRetrieve.js';
+import DRroutine from './dataRetrieve.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     initFirebase();
-    var value = new DataRetrieve();
-    console.log(value);
+    var APItype = 'O-A0001-001';
+    var APItype = 'F-C0032-001';
+    DRroutine(APItype);
 });
 
 function initFirebase() {
@@ -43,8 +44,4 @@ function initFirebase() {
         loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     }
     // console.log('Hello from Firebase!');
-}
-
-function routine() {
-    console.log('Hello from Firebase!');
 }

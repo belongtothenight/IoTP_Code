@@ -1,40 +1,160 @@
-export default class DataRetrieve {
-    constructor() {
-        const data = {
+class DataRetrieve {
+    constructor(api) {
+        this.data = {
             'src sites': {
                 'TWCWB_OpenData': 'https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/',
                 'TWCWB_Document': 'https://opendata.cwb.gov.tw/dataset/forecast?page=1',
             },
             'APIs': {
-                'Weather Forecast': {
+                'F-C0032-001': {
+                    'description': 'Weather Forecast',
                     'updateFrequency': '6', // 6 hours
+                    'locationLayer': 'city',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization='
                 },
-                'Tide Forecast': {
-                    'updateFrequency': '24', // 24 hours
-                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization='
-                },
-                'Health Weather Cold Injury': {
-                    'updateFrequency': '6', // 6 hours
-                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0085-003?Authorization='
-                },
-                'Weather Observation': {
+                // 'F-A0021-001': {
+                //     'description': 'Tide Forecast',
+                //     'updateFrequency': '24', // 24 hours
+                //     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization='
+                // },
+                // 'F-A0085-003': {
+                //     'description': 'Health Weather Cold Injury',
+                //     'updateFrequency': '6', // 6 hours
+                //     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0085-003?Authorization='
+                // },
+                'O-A0001-001': {
+                    'description': 'Weather Observation',
                     'updateFrequency': '1', // 1 hour
+                    'locationLayer': 'station',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization='
                 },
                 // more can be added...
             },
             'Token': {
                 'User01': 'CWB-8523DB1B-D613-401B-849E-BD0A19FAB9E6',
+            },
+            'fullLink': '',
+            'selectedAPI': api,
+            'Location': {
+
+            },
+            'LocationOption': {
+            },
+            'rawData': {
             }
+
         }
     }
 
-    _requestAPI(apiLink, token) {
-        console.log('requestAPI');
-        const fullLink = apiLink + token;
-        console.log(fullLink);
-        fetch(fullLink)
+    async requestAPI(token) {
+        const fullLink = this.data.APIs[this.data.selectedAPI].link + token;
+        this.data.fullLink = fullLink;
+        const response = await fetch(fullLink, { method: 'GET' });
+        const data = await response.json();
+        this.data.rawData = data;
+        return data;
+    }
+
+    extractLocation() {
+        var location_data = this.data.rawData.records.location;
+        var data_length = location_data.length;
+        var location_name = [];
+
+        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
+            case 'city':
+                for (let index = 0; index < data_length; index++) {
+                    var temp_locationName = location_data[index].locationName;
+                    location_name[index] = {
+                        location: temp_locationName,
+                    };
+                }
+                break;
+            case 'town':
+                break;
+            case 'station':
+                for (let index = 0; index < data_length; index++) {
+                    var temp_locationName = location_data[index].locationName;
+                    var temp_cityName = location_data[index].parameter[0].parameterValue;
+                    var temp_townName = location_data[index].parameter[2].parameterValue;
+                    var temp_stationId = location_data[index].stationId;
+                    location_name[index] = {
+                        city: temp_cityName,
+                        town: temp_townName,
+                        location: temp_locationName,
+                        id: temp_stationId
+                    };
+                }
+                break;
+            default:
+                location_name = "NA";
+        }
+        this.data.Location = location_name;
+    }
+
+    generateLocationOption() {
+        function compare(a, b) {
+            var keya = Object.keys(a)[0];
+            var keyb = Object.keys(b)[0];
+            // node.warn(keya);
+            // node.warn(keya);
+            if (keya < keyb) {
+                return -1;
+            } else if (keya > keyb) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        var data = this.data.Location;
+        var option = [];
+
+        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
+            case 'city':
+                for (let index = 0; index < data.length; index++) {
+                    var temp_location = data[index].location;
+                    var temp_obj = {};
+                    temp_obj[temp_location] = temp_location;
+                    option[index] = temp_obj;
+                }
+            case 'town':
+                break;
+            case 'station':
+                for (let index = 0; index < data.length; index++) {
+                    var temp_id = data[index].id;
+                    var temp_location = data[index].location;
+                    var temp_name = data[index].city + '/' + data[index].town + '/' + data[index].location;
+                    var temp_obj = {};
+                    temp_obj[temp_name] = temp_id;
+                    option[index] = temp_obj;
+                }
+                break;
+            default:
+                break;
+        }
+        option = option.sort(compare);
+        this.data.LocationOption = option;
+        return option;
+    }
+
+    extractItem() {
+
+    }
+
+    generateItemOption() {
+
     }
 
 };
+
+export default async function DRroutine(APItype) {
+    // var APItype = 'O-A0001-001';
+    var APItype = 'F-C0032-001';
+    var dr = new DataRetrieve(APItype);
+    var data = await dr.requestAPI(dr.data.Token['User01']);
+    console.log(data);
+    dr.extractLocation();
+    console.log(dr.data.Location);
+    dr.generateLocationOption();
+    console.log(dr.data.LocationOption);
+}
