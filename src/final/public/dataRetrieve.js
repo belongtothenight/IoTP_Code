@@ -45,7 +45,7 @@ class DataRetrieve {
 
         }
     }
-
+    // add corresponding subsctructor(options) of each API
     async requestAPI(token) {
         const fullLink = this.data.APIs[this.data.selectedAPI].link + token;
         this.data.fullLink = fullLink;
