@@ -13,11 +13,26 @@ class DataRetrieve {
                     'locationLayer': 'city',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=',
                     'itemName': {
-                        'Wx': 'Weather Condition',
-                        'MaxT': 'Maximum Temperature',
-                        'MinT': 'Minimum Temperature',
-                        'CI': 'Comfort Level',
-                        'PoP': 'Probability of Preciptation',
+                        'Wx': {
+                            'name': 'Weather Condition',
+                            'unit': 'NA',
+                        },
+                        'MaxT': {
+                            'name': 'Maximum Temperature',
+                            'unit': '°C',
+                        },
+                        'MinT': {
+                            'name': 'Minimum Temperature',
+                            'unit': '°C',
+                        },
+                        'CI': {
+                            'name': 'Comfort Level',
+                            'unit': 'NA',
+                        },
+                        'PoP': {
+                            'name': 'Probability of Preciptation',
+                            'unit': '%',
+                        },
                     }
                 },
                 // 'F-A0021-001': {
@@ -35,22 +50,68 @@ class DataRetrieve {
                     'updateFrequency': '1', // 1 hour
                     'locationLayer': 'station',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=',
-                    'itemName': {
-                        'ELEV': 'Elevation',
-                        'WDIR': 'Wind Direction',
-                        'WDSD': 'Wind Speed',
-                        'TEMP': 'Temperature',
-                        'HUMD': 'Humidity',
-                        'PRES': 'Pressure',
-                        'H_24R': 'Cumulative Rainfall',
-                        'H_FX': 'Maximum Wind Speed this hour',
-                        'H_XD': 'Maximum Wind Direction this hour',
-                        'H_FXT': 'Maximum Wind Time this hour',
-                        'D_TX': 'Maximum Temperature today (°C)',
-                        'D_TXT': 'Maximum Temperature Time today',
-                        'D_TN': 'Minimum Temperature today (°C)',
-                        'D_TNT': 'Minimum Temperature Time today',
-                    }
+                    'itemDict': {
+                        'ELEV': {
+                            'name': 'Elevation',
+                            'unit': 'm',
+                        },
+                        'WDIR': {
+                            'name': 'Wind Direction',
+                            'unit': 'degree',
+                        },
+                        'WDSD': {
+                            'name': 'Wind Speed',
+                            'unit': 'm/s',
+                        },
+                        'TEMP': {
+                            'name': 'Temperature',
+                            'unit': 'm/s',
+                        },
+                        'HUMD': {
+                            'name': 'Humidity',
+                            'unit': 'g/kg',
+                        },
+                        'PRES': {
+                            'name': 'Pressure',
+                            'unit': 'hpa',
+                        },
+                        'H_24R': {
+                            'name': 'Cumulative Rainfall',
+                            'unit': 'mm',
+                        },
+                        'H_FX': {
+                            'name': 'Maximum Wind Speed this hour',
+                            'unit': 'm/s',
+                        },
+                        'H_XD': {
+                            'name': 'Maximum Wind Direction this hour',
+                            'unit': 'degree',
+                        },
+                        'H_FXT': {
+                            'name': 'Maximum Wind Time this hour',
+                            'unit': 'hms',
+                        },
+                        'D_TX': {
+                            'name': 'Maximum Temperature today',
+                            'unit': '°C',
+                        },
+                        'D_TXT': {
+                            'name': 'Maximum Temperature Time today',
+                            'unit': 'hms',
+                        },
+                        'D_TN': {
+                            'name': 'Minimum Temperature today',
+                            'unit': '°C',
+                        },
+                        'D_TNT': {
+                            'name': 'Minimum Temperature Time today',
+                            'unit': 'hms',
+                        },
+                        'Weather': {
+                            'name': 'Weather',
+                            'unit': 'NA',
+                        }
+                    },
                 },
                 // more can be added...
             },
@@ -70,8 +131,6 @@ class DataRetrieve {
             },
             'ItemOption': {
             },
-            'ItemValue': {
-            }
         }
     }
     // add corresponding subsctructor(options5) of each API?
@@ -162,7 +221,7 @@ class DataRetrieve {
                     var temp_location = data[index].location;
                     var temp_name = data[index].city + '/' + data[index].town + '/' + data[index].location;
                     var temp_obj = {};
-                    temp_obj[temp_name] = temp_id;
+                    temp_obj[temp_id] = temp_name;
                     option[index] = temp_obj;
                 }
                 break;
@@ -214,7 +273,8 @@ class DataRetrieve {
 
         for (let index = 0; index < itemData.length; index++) {
             var temp_obj = {};
-            temp_obj[this.data.APIs[this.data.selectedAPI].itemName[itemData[index]]] = itemData[index];
+            var name = this.data.APIs[this.data.selectedAPI].itemDict[itemData[index]].name;
+            temp_obj[itemData[index]] = name;
             option.push(temp_obj);
         }
 
@@ -222,13 +282,27 @@ class DataRetrieve {
         return option;
     }
 
-    extractItemValue() {
+    extractItemValue(location, itemName) {
+        var locationData = this.data.rawData.records.location;
+
         switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
             case 'city':
                 break;
             case 'town':
                 break;
             case 'station':
+                // look for same location (stationId)
+                for (let i = 0; i < locationData.length; i++) {
+                    if (locationData[i].stationId === location) {
+                        const weatherElementData = locationData[i].weatherElement;
+                        // look for same weatherElement
+                        for (let j = 0; j < weatherElementData.length; j++) {
+                            if (weatherElementData[j].elementName === itemName) {
+                                return weatherElementData[j].elementValue
+                            }
+                        }
+                    }
+                }
                 break;
             default:
                 break;
@@ -238,8 +312,8 @@ class DataRetrieve {
 };
 
 async function DRroutine(APItype) {
-    // var APItype = 'O-A0001-001';
-    var APItype = 'F-C0032-001';
+    var APItype = 'O-A0001-001';
+    // var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
     console.log(dr.data.fullLink)
@@ -252,8 +326,8 @@ async function DRroutine(APItype) {
     console.log(dr.data.Item);
     dr.generateItemOption();
     console.log(dr.data.ItemOption);
-    dr.extractItemValue();
-    console.log(dr.data.ItemValue);
+    var value = dr.extractItemValue('C0A560', 'ELEV');
+    console.log(value)
 }
 
 export { DRroutine, DataRetrieve }
