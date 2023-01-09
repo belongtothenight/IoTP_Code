@@ -12,7 +12,7 @@ class DataRetrieve {
                     'updateFrequency': '6', // 6 hours
                     'locationLayer': 'city',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=',
-                    'itemName': {
+                    'itemDict': {
                         'Wx': {
                             'name': 'Weather Condition',
                             'unit': 'NA',
@@ -284,9 +284,23 @@ class DataRetrieve {
 
     extractItemValue(location, itemName) {
         var locationData = this.data.rawData.records.location;
+        console.log(locationData)
 
+        // switch condition here needs to be APIs
         switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
             case 'city':
+                // look for same location
+                for (let i = 0; i < locationData.length; i++) {
+                    if (locationData[i].locationName === location) {
+                        // look for same weatherElement
+                        const weatherElementData = locationData[i].weatherElement
+                        for (let j = 0; j < weatherElementData.length; j++) {
+                            if (weatherElementData[j].elementName === itemName) {
+                                return weatherElementData[j].time;
+                            }
+                        }
+                    }
+                }
                 break;
             case 'town':
                 break;
@@ -294,8 +308,8 @@ class DataRetrieve {
                 // look for same location (stationId)
                 for (let i = 0; i < locationData.length; i++) {
                     if (locationData[i].stationId === location) {
-                        const weatherElementData = locationData[i].weatherElement;
                         // look for same weatherElement
+                        const weatherElementData = locationData[i].weatherElement;
                         for (let j = 0; j < weatherElementData.length; j++) {
                             if (weatherElementData[j].elementName === itemName) {
                                 return weatherElementData[j].elementValue
@@ -312,8 +326,8 @@ class DataRetrieve {
 };
 
 async function DRroutine(APItype) {
-    var APItype = 'O-A0001-001';
-    // var APItype = 'F-C0032-001';
+    // var APItype = 'O-A0001-001';
+    var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
     console.log(dr.data.fullLink)
@@ -326,7 +340,8 @@ async function DRroutine(APItype) {
     console.log(dr.data.Item);
     dr.generateItemOption();
     console.log(dr.data.ItemOption);
-    var value = dr.extractItemValue('C0A560', 'ELEV');
+    // var value = dr.extractItemValue('C0A560', 'ELEV');
+    var value = dr.extractItemValue('嘉義縣', 'Wx');
     console.log(value)
 }
 
