@@ -1,7 +1,11 @@
-import DRroutine from './dataRetrieve.js';
+import { DRroutine, DataRetrieve } from './dataRetrieve.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     initFirebase();
+
+    const DR = new DataRetrieve();
+    console.log(DR.data.APIs)
+
     var APItype = 'O-A0001-001';
     var APItype = 'F-C0032-001';
     DRroutine(APItype);

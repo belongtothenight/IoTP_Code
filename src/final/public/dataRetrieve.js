@@ -222,7 +222,7 @@ class DataRetrieve {
         return option;
     }
 
-    generateItemValue() {
+    extractItemValue() {
         switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
             case 'city':
                 break;
@@ -237,7 +237,7 @@ class DataRetrieve {
 
 };
 
-export default async function DRroutine(APItype) {
+async function DRroutine(APItype) {
     // var APItype = 'O-A0001-001';
     var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
@@ -252,4 +252,8 @@ export default async function DRroutine(APItype) {
     console.log(dr.data.Item);
     dr.generateItemOption();
     console.log(dr.data.ItemOption);
+    dr.extractItemValue();
+    console.log(dr.data.ItemValue);
 }
+
+export { DRroutine, DataRetrieve }
