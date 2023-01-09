@@ -4,6 +4,7 @@ class DataRetrieve {
             'src sites': {
                 'TWCWB_OpenData': 'https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/',
                 'TWCWB_Document': 'https://opendata.cwb.gov.tw/dataset/forecast?page=1',
+                'TWCWB_WordDict': 'https://www.cwb.gov.tw/V8/C/K/bilingual_glossary.html',
             },
             'APIs': {
                 'F-C0032-001': {
@@ -12,7 +13,11 @@ class DataRetrieve {
                     'locationLayer': 'city',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=',
                     'itemName': {
-                        // 'ELEV'
+                        'Wx': 'Weather Condition',
+                        'MaxT': 'Maximum Temperature',
+                        'MinT': 'Minimum Temperature',
+                        'CI': 'Comfort Level',
+                        'PoP': 'Probability of Preciptation',
                     }
                 },
                 // 'F-A0021-001': {
@@ -207,20 +212,10 @@ class DataRetrieve {
         var itemData = this.data.Item;
         var option = [];
 
-        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
-            case 'city':
-                break;
-            case 'town':
-                break;
-            case 'station':
-                for (let index = 0; index < itemData.length; index++) {
-                    var temp_obj = {};
-                    temp_obj[this.data.APIs[this.data.selectedAPI].itemName[itemData[index]]] = itemData[index];
-                    option.push(temp_obj);
-                }
-                break;
-            default:
-                break;
+        for (let index = 0; index < itemData.length; index++) {
+            var temp_obj = {};
+            temp_obj[this.data.APIs[this.data.selectedAPI].itemName[itemData[index]]] = itemData[index];
+            option.push(temp_obj);
         }
 
         this.data.ItemOption = option;
