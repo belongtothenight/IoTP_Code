@@ -7,6 +7,7 @@ class DataRetrieve {
                 'TWCWB_WordDict': 'https://www.cwb.gov.tw/V8/C/K/bilingual_glossary.html',
             },
             'APIs': {
+                // 'locationLyaer' is used to reduce replicated code, but if every API has totally different JSON structure, this is no use and can be abandoned.
                 'F-C0032-001': {
                     'description': 'Weather Forecast',
                     'updateFrequency': '6', // 6 hours
@@ -287,8 +288,8 @@ class DataRetrieve {
         console.log(locationData)
 
         // switch condition here needs to be APIs
-        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
-            case 'city':
+        switch (this.data.selectedAPI) {
+            case 'F-C0032-001':
                 // look for same location
                 for (let i = 0; i < locationData.length; i++) {
                     if (locationData[i].locationName === location) {
@@ -302,9 +303,7 @@ class DataRetrieve {
                     }
                 }
                 break;
-            case 'town':
-                break;
-            case 'station':
+            case 'O-A0001-001':
                 // look for same location (stationId)
                 for (let i = 0; i < locationData.length; i++) {
                     if (locationData[i].stationId === location) {
