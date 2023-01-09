@@ -284,6 +284,7 @@ class DataRetrieve {
     }
 
     extractItemValue(location, itemName) {
+        efi
         var locationData = this.data.rawData.records.location;
         console.log(locationData)
 
@@ -329,16 +330,16 @@ async function DRroutine(APItype) {
     var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
-    console.log(dr.data.fullLink)
-    console.log(data);
+    // console.log(dr.data.fullLink)
+    // console.log(data);
     dr.extractLocation();
-    console.log(dr.data.Location);
+    // console.log(dr.data.Location);
     dr.generateLocationOption();
-    console.log(dr.data.LocationOption);
+    // console.log(dr.data.LocationOption);
     dr.extractItem();
-    console.log(dr.data.Item);
+    // console.log(dr.data.Item);
     dr.generateItemOption();
-    console.log(dr.data.ItemOption);
+    // console.log(dr.data.ItemOption);
     // var value = dr.extractItemValue('C0A560', 'ELEV');
     var value = dr.extractItemValue('嘉義縣', 'Wx');
     console.log(value)
