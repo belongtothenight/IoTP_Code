@@ -10,7 +10,10 @@ class DataRetrieve {
                     'description': 'Weather Forecast',
                     'updateFrequency': '6', // 6 hours
                     'locationLayer': 'city',
-                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization='
+                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=',
+                    'itemName': {
+                        // 'ELEV'
+                    }
                 },
                 // 'F-A0021-001': {
                 //     'description': 'Tide Forecast',
@@ -26,7 +29,23 @@ class DataRetrieve {
                     'description': 'Weather Observation',
                     'updateFrequency': '1', // 1 hour
                     'locationLayer': 'station',
-                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization='
+                    'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=',
+                    'itemName': {
+                        'ELEV': 'Elevation',
+                        'WDIR': 'Wind Direction',
+                        'WDSD': 'Wind Speed',
+                        'TEMP': 'Temperature',
+                        'HUMD': 'Humidity',
+                        'PRES': 'Pressure',
+                        'H_24R': 'Cumulative Rainfall',
+                        'H_FX': 'Maximum Wind Speed this hour',
+                        'H_XD': 'Maximum Wind Direction this hour',
+                        'H_FXT': 'Maximum Wind Time this hour',
+                        'D_TX': 'Maximum Temperature today (°C)',
+                        'D_TXT': 'Maximum Temperature Time today',
+                        'D_TN': 'Minimum Temperature today (°C)',
+                        'D_TNT': 'Minimum Temperature Time today',
+                    }
                 },
                 // more can be added...
             },
@@ -35,24 +54,37 @@ class DataRetrieve {
             },
             'fullLink': '',
             'selectedAPI': api,
+            'rawData': {
+            },
             'Location': {
 
             },
             'LocationOption': {
             },
-            'rawData': {
+            'Item': {
+            },
+            'ItemOption': {
+            },
+            'ItemValue': {
             }
-
         }
     }
-    // add corresponding subsctructor(options) of each API
+    // add corresponding subsctructor(options5) of each API?
     async requestAPI(token) {
-        const fullLink = this.data.APIs[this.data.selectedAPI].link + token;
-        this.data.fullLink = fullLink;
-        const response = await fetch(fullLink, { method: 'GET' });
-        const data = await response.json();
-        this.data.rawData = data;
-        return data;
+        try {
+            const fullLink = this.data.APIs[this.data.selectedAPI].link + token;
+            this.data.fullLink = fullLink;
+            const response = await fetch(fullLink, { method: 'GET' });
+            const data = await response.json();
+            this.data.rawData = data;
+            if (data.records.location.length === 0) {
+                console.log('Server/API down.');
+                data = 'NA';
+            }
+            return data;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     extractLocation() {
@@ -138,11 +170,74 @@ class DataRetrieve {
     }
 
     extractItem() {
+        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
+            // use first set of data to get items
+            case 'city':
+                var weatherElementData = this.data.rawData.records.location[0].weatherElement;
+                var weatherElementLength = weatherElementData.length;
+                var weatherElementName = [];
 
+                for (let index = 0; index < weatherElementLength; index++) {
+                    weatherElementName.push(weatherElementData[index].elementName);
+                }
+
+                this.data.Item = weatherElementName;
+                return weatherElementName;
+                break;
+            case 'town':
+                break;
+            case 'station':
+                var weatherElementData = this.data.rawData.records.location[0].weatherElement;
+                var weatherElementLength = weatherElementData.length;
+                var weatherElementName = [];
+
+                for (let index = 0; index < weatherElementLength; index++) {
+                    weatherElementName[index] = weatherElementData[index].elementName;
+                }
+
+                this.data.Item = weatherElementName;
+                return weatherElementName;
+                break;
+            default:
+                break;
+        }
     }
 
     generateItemOption() {
+        var itemData = this.data.Item;
+        var option = [];
 
+        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
+            case 'city':
+                break;
+            case 'town':
+                break;
+            case 'station':
+                for (let index = 0; index < itemData.length; index++) {
+                    var temp_obj = {};
+                    temp_obj[this.data.APIs[this.data.selectedAPI].itemName[itemData[index]]] = itemData[index];
+                    option.push(temp_obj);
+                }
+                break;
+            default:
+                break;
+        }
+
+        this.data.ItemOption = option;
+        return option;
+    }
+
+    generateItemValue() {
+        switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
+            case 'city':
+                break;
+            case 'town':
+                break;
+            case 'station':
+                break;
+            default:
+                break;
+        }
     }
 
 };
@@ -152,9 +247,14 @@ export default async function DRroutine(APItype) {
     var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
+    console.log(dr.data.fullLink)
     console.log(data);
     dr.extractLocation();
     console.log(dr.data.Location);
     dr.generateLocationOption();
     console.log(dr.data.LocationOption);
+    dr.extractItem();
+    console.log(dr.data.Item);
+    dr.generateItemOption();
+    console.log(dr.data.ItemOption);
 }
