@@ -12,17 +12,51 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.getElementById('API1_Location').addEventListener('change', async function () {
+    var locationValue = document.getElementById('API1_Location').value;
+    // make sure to select something but default option
+    if (locationValue === 0) {
+        console.log('no location selected');
+        return;
+    }
     API1_flag.location = true;
-    var value = await DRsingleRun('O-A0001-001', 'C0A560', 'ELEV');
-    // var value = await DRsingleRun('F-C0032-001', '嘉義縣', 'Wx');
-    console.log(value);
+    // make sure both location and item is selected
+    var flag = true;
+    Object.keys(API1_flag).forEach(function (key) {
+        if (API1_flag[key] === false) {
+            flag = false;
+        }
+    });
+    // all conditions are met
+    if (flag) {
+        var location = document.getElementById('API1_Location').value;
+        var item = document.getElementById('API1_Item').value;
+        var returnValue = await DRsingleRun('F-C0032-001', location, item);
+        console.log(returnValue);
+    }
 });
 
 document.getElementById('API1_Item').addEventListener('change', async function () {
+    var itemValue = document.getElementById('API1_Item').value;
+    // make sure to select something but default option
+    if (itemValue == 0) {
+        console.log('no item selected');
+        return;
+    }
     API1_flag.item = true;
-    var value = await DRsingleRun('O-A0001-001', 'C0A560', 'ELEV');
-    // var value = await DRsingleRun('F-C0032-001', '嘉義縣', 'Wx');
-    console.log(value);
+    // make sure both location and item is selected
+    var flag = true;
+    Object.keys(API1_flag).forEach(function (key) {
+        if (API1_flag[key] === false) {
+            flag = false;
+        }
+    });
+    // all conditions are met
+    if (flag) {
+        var location = document.getElementById('API1_Location').value;
+        var item = document.getElementById('API1_Item').value;
+        var returnValue = await DRsingleRun('F-C0032-001', location, item);
+        console.log(returnValue);
+    }
 });
 
 // change https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
@@ -98,7 +132,7 @@ async function initWebpageElement() {
     for (let i = 0; i < length; i++) {
         var key = Object.keys(Info[api1].locationOption[i])[0];
         var option = key;
-        html += `<option value="${i + 1}">${option}</option>`;
+        html += `<option value="${key}">${option}</option>`;
     }
     document.getElementById('API1_Location').innerHTML = html;
 
@@ -108,7 +142,7 @@ async function initWebpageElement() {
     for (let i = 0; i < length; i++) {
         var key = Object.keys(Info[api1].itemOption[i])[0];
         var option = Info[api1].itemOption[i][key];
-        html += `<option value="${i + 1}">${option}</option>`;
+        html += `<option value="${key}">${option}</option>`;
     }
     document.getElementById('API1_Item').innerHTML = html;
 
