@@ -66,6 +66,7 @@ label {
     font-size: 40px;
     text-align: center;
     background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
 }
 
 /* Create two unequal columns that floats next to each other */
@@ -97,6 +98,7 @@ label {
     margin-bottom: 20px;
     overflow: auto;
     position: relative;
+    border-radius: 10px;
 }
 
 /* Left Split */
