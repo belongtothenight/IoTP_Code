@@ -1,109 +1,99 @@
-body {
-    background: #ECEFF1;
-    color: rgba(0, 0, 0, 0.87);
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+/* blog layout
+https: //www.w3schools.com/howto/howto_css_blog_layout.asp
+*/
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    /* box-sizing: content-box; */
 }
 
-#message {
+html {
+    box-sizing: border-box;
+    font-family: Arial;
+    padding: 20px;
+    background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+    padding: 30px;
+    font-size: 40px;
+    text-align: center;
     background: white;
-    max-width: 360px;
-    margin: 100px auto 16px;
-    padding: 32px 24px;
-    border-radius: 3px;
 }
 
-#message h2 {
-    color: #ffa100;
-    font-weight: bold;
-    font-size: 16px;
-    margin: 0 0 8px;
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {
+    float: left;
+    width: 75%;
 }
 
-#message h1 {
-    font-size: 22px;
-    font-weight: 300;
-    color: rgba(0, 0, 0, 0.6);
-    margin: 0 0 16px;
+/* Right column */
+.rightcolumn {
+    float: left;
+    width: 25%;
+    padding-left: 20px;
 }
 
-#message p {
-    line-height: 140%;
-    margin: 16px 0 24px;
-    font-size: 14px;
+/* Fake image */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
 }
 
-#message a {
-    display: block;
+/* Add a card effect for articles */
+.card {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    overflow: auto;
+}
+
+/* Left Split */
+.leftSplit {
+    float: left;
+    /* position: absolute; */
+    width: 30%;
+    background-color: rgb(255, 170, 0);
+}
+
+/* Right Split */
+.rightSplit {
+    float: right;
+    /* position: absolute; */
+    width: 70%;
+    background-color: red;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Footer */
+.footer {
+    padding: 20px;
     text-align: center;
-    background: #039be5;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: white;
-    padding: 16px;
-    border-radius: 4px;
+    background: #ddd;
+    margin-top: 20px;
 }
 
-#message,
-#message a {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
 
-#load {
-    color: rgba(0, 0, 0, 0.4);
-    text-align: center;
-    font-size: 13px;
-}
 
-@media (max-width: 600px) {
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
 
-    body,
-    #message {
-        margin-top: 0;
-        background: white;
-        box-shadow: none;
-    }
-
-    body {
-        border-top: 16px solid #ffa100;
+    .leftcolumn,
+    .rightcolumn {
+        width: 100%;
+        padding: 0;
     }
 }
+
 
 /* Split the screen in half */
-.split {
-    height: 100%;
-    width: 50%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-}
-
-/* Control the left side */
-.left {
-    left: 0;
-    /* background-color: #111; */
-}
-
-/* Control the right side */
-.right {
-    right: 0;
-    /* background-color: red; */
-}
-
-/* If you want the content centered horizontally and vertically */
-.centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-/* Style the image inside the centered container, if needed */
-.centered img {
-    width: 150px;
-    border-radius: 50%;
-}
