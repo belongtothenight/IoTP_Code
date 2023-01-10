@@ -13,6 +13,13 @@ html {
     font-family: Arial;
     padding: 20px;
     background: #f1f1f1;
+    background-image: url('./img/2021-08-21_15.29.05-Edited.png');
+    /* position: absolute; */
+    background-attachment: fixed;
+}
+
+select {
+    float: right;
 }
 
 /* Header/Blog Title */
@@ -20,7 +27,7 @@ html {
     padding: 30px;
     font-size: 40px;
     text-align: center;
-    background: white;
+    background: rgba(255, 255, 255, 0.6);
 }
 
 /* Create two unequal columns that floats next to each other */
@@ -46,9 +53,10 @@ html {
 
 /* Add a card effect for articles */
 .card {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.6);
     padding: 20px;
     margin-top: 20px;
+    margin-bottom: 20px;
     overflow: auto;
 }
 
@@ -56,14 +64,14 @@ html {
 .leftSplit {
     float: left;
     width: 30%;
-    background-color: rgb(255, 170, 0);
+    /* background-color: rgb(255, 170, 0); */
 }
 
 /* Right Split */
 .rightSplit {
     float: right;
     width: 70%;
-    background-color: red;
+    /* background-color: red; */
 }
 
 /* Clear floats after the columns */
@@ -77,7 +85,7 @@ html {
 .footer {
     padding: 20px;
     text-align: center;
-    background: #ddd;
+    /* background: #ddd; */
     margin-top: 20px;
 }
 
