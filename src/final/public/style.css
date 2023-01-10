@@ -40,6 +40,15 @@ table {
 
 select {
     float: right;
+    display: inline-block;
+}
+
+span {
+    white-space: nowrap;
+}
+
+label {
+    position: relative;
 }
 
 /* Header/Blog Title */
@@ -83,14 +92,28 @@ select {
 /* Left Split */
 .leftSplit {
     float: left;
-    width: 30%;
+    width: 40%;
     /* background-color: rgb(255, 170, 0); */
 }
 
 /* Right Split */
 .rightSplit {
     float: right;
-    width: 70%;
+    width: 60%;
+    /* background-color: red; */
+}
+
+/* Top Split */
+.topSplit {
+    float: top;
+    width: 100%;
+    /* background-color: red; */
+}
+
+/* Bottom Split */
+.bottomSplit {
+    float: bottom;
+    width: 100%;
     /* background-color: red; */
 }
 
@@ -109,7 +132,9 @@ select {
     margin-top: 20px;
 }
 
-
+#sources {
+    text-align: left;
+}
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 800px) {
@@ -120,6 +145,3 @@ select {
         padding: 0;
     }
 }
-
-
-/* Split the screen in half */
