@@ -41,6 +41,7 @@ table {
 select {
     float: right;
     display: inline-block;
+    width: 70%;
 }
 
 span {
@@ -48,7 +49,10 @@ span {
 }
 
 label {
-    position: relative;
+    display: inline-block;
+    float: bottom;
+    height: 50%;
+    /* position: absolute; */
 }
 
 /* Header/Blog Title */
@@ -87,6 +91,7 @@ label {
     margin-top: 20px;
     margin-bottom: 20px;
     overflow: auto;
+    position: relative;
 }
 
 /* Left Split */
@@ -101,6 +106,7 @@ label {
     float: right;
     width: 60%;
     /* background-color: red; */
+    padding: 5%;
 }
 
 /* Top Split */

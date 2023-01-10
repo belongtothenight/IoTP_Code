@@ -204,7 +204,8 @@ async function initWebpageElementAPI1(input) {
     if (Info === false) {
         console.log('Error: API1 No Info Returned');
         document.getElementById('API1_ItemValue').innerHTML = 'Error: No Info Returned from API1/Server';
-        return;
+        input['API1'] = false;
+        return input;
     }
 
     // update API1 element
@@ -244,7 +245,8 @@ async function initWebpageElementAPI2(input) {
     if (Info === false) {
         console.log('Error: API2 No Info Returned');
         document.getElementById('API2_ItemValue').innerHTML = 'Error: No Info Returned from API2/Server';
-        return;
+        input['API2'] = false;
+        return input;
     }
 
     // update API2 element
