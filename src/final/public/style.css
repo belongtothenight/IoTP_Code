@@ -10,7 +10,7 @@ https: //www.w3schools.com/howto/howto_css_blog_layout.asp
 
 html {
     box-sizing: border-box;
-    font-family: Arial;
+    font-family: Roboto, Helvetica, Arial, Helvetica, sans-serif;
     padding: 20px;
     background: #f1f1f1;
     background-image: url('./img/2021-08-21_15.29.05-Edited.png');
@@ -31,6 +31,7 @@ h5 {
 p {
     text-align: center;
     vertical-align: middle;
+    font-weight: 550;
 }
 
 table {
@@ -42,6 +43,9 @@ select {
     float: right;
     display: inline-block;
     width: 70%;
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
 }
 
 span {
@@ -53,6 +57,7 @@ label {
     float: bottom;
     height: 50%;
     /* position: absolute; */
+    font-size: 20px;
 }
 
 /* Header/Blog Title */
@@ -138,8 +143,20 @@ label {
     margin-top: 20px;
 }
 
+#about {
+    text-align: left;
+}
+
 #sources {
     text-align: left;
+}
+
+#API1_ItemValue {
+    font-size: 18px;
+}
+
+#API2_ItemValue {
+    font-size: 18px;
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */

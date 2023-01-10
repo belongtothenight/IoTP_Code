@@ -310,6 +310,7 @@ function updateAPI1Element(value, unit, item) {
     html += '</table>';
     // console.log(html);
     document.getElementById('API1_ItemValue').innerHTML = html;
+    document.getElementById('API1_ItemValue').style.fontSize = '30px';
 }
 
 function updateAPI2Element(value, unit) {
@@ -318,6 +319,7 @@ function updateAPI2Element(value, unit) {
         html = 'Data not available';
     }
     document.getElementById('API2_ItemValue').innerHTML = html;
+    document.getElementById('API2_ItemValue').style.fontSize = '30px';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
