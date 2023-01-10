@@ -156,6 +156,7 @@ class DataRetrieve {
                 console.log('Server/API down.');
                 data = 'NA';
             }
+            // console.log(data);
             return data;
         } catch (err) {
             console.log(err);

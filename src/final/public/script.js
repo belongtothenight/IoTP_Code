@@ -176,8 +176,8 @@ async function initWebpageElement() {
     document.getElementById('API2_title').innerHTML = Info.APIs[api2];
 
     // update APIs description
-    document.getElementById('API1_description').innerHTML = api1;
-    document.getElementById('API2_description').innerHTML = api2;
+    document.getElementById('API1_description').innerHTML = 'API ID: ' + api1;
+    document.getElementById('API2_description').innerHTML = 'API ID: ' + api2;
 
     // update sources
     html = '';
