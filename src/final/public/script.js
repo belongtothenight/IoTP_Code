@@ -30,11 +30,16 @@ document.getElementById('API1_Location').addEventListener('change', async functi
     });
     // all conditions are met
     if (flag) {
+        // read user input
         var location = document.getElementById('API1_Location').value;
         var item = document.getElementById('API1_Item').value;
+        // get value
         var returnValue = await DRsingleRun(APIs.API1, location, item);
-        console.log(returnValue);
-        updateAPI1Element(returnValue);
+        // console.log(returnValue);
+        // get unit
+        var dr = new DataRetrieve();
+        var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
+        updateAPI1Element(returnValue, unit, item);
     }
 });
 
@@ -55,11 +60,16 @@ document.getElementById('API1_Item').addEventListener('change', async function (
     });
     // all conditions are met
     if (flag) {
+        // read user input
         var location = document.getElementById('API1_Location').value;
         var item = document.getElementById('API1_Item').value;
+        // get value
         var returnValue = await DRsingleRun(APIs.API1, location, item);
-        console.log(returnValue);
-        updateAPI1Element(returnValue);
+        // console.log(returnValue);
+        // get unit
+        var dr = new DataRetrieve();
+        var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
+        updateAPI1Element(returnValue, unit, item);
     }
 });
 
@@ -168,15 +178,20 @@ async function initWebpageElement() {
     var html = '';
     const Info = await InitInfo();
     // console.log(Info);
+    if (Info === false) {
+        console.log('Error: No Info Returned');
+        document.getElementById('API1_ItemValue').innerHTML = 'Error: No Info Returned from API/Server';
+        return;
+    }
 
-    // update APIs title
+    // update API1 element
     const api1 = Object.keys(Info.APIs)[0];
-    const api2 = Object.keys(Info.APIs)[1];
     document.getElementById('API1_title').innerHTML = Info.APIs[api1];
-    document.getElementById('API2_title').innerHTML = Info.APIs[api2];
-
-    // update APIs description
     document.getElementById('API1_description').innerHTML = 'API ID: ' + api1;
+
+    // update API2 element
+    const api2 = Object.keys(Info.APIs)[1];
+    document.getElementById('API2_title').innerHTML = Info.APIs[api2];
     document.getElementById('API2_description').innerHTML = 'API ID: ' + api2;
 
     // update sources
@@ -234,11 +249,43 @@ async function initWebpageElement() {
     return { 'API1': api1, 'API2': api2 };
 }
 
-function updateAPI1Element(input) {
-
+function updateAPI1Element(value, unit, item) {
+    var html = '<table>';
+    var length1 = value.length;
+    for (let i = 0; i < length1; i++) {
+        var length2 = Object.keys(value[i]).length;
+        var content = [];
+        for (let j = 0; j < length2; j++) {
+            var key1 = Object.keys(value[i])[j];
+            var value1 = value[i][key1];
+            // console.log(key1, value1);
+            if (j !== 2) {
+                content.push(value1);
+            } else {
+                var length3 = Object.keys(value1).length;
+                for (let k = 0; k < length3; k++) {
+                    var key2 = Object.keys(value1)[k];
+                    var value2 = value1[key2];
+                    // console.log(key2, value2);
+                    content.push(value2);
+                }
+            }
+        }
+        console.log(content);
+        if (item !== 'Wx') {
+            content[3] = unit;
+        }
+        html += `<tr><td>${content[0]} - ${content[1]}</td><td>${content[2]} ${content[3]}</td></tr>`;
+    }
+    html += '</table>';
+    // console.log(html);
+    document.getElementById('API1_ItemValue').innerHTML = html;
 }
 
 function updateAPI2Element(value, unit) {
     var html = value + ' ' + unit;
+    if (value < 0) {
+        html = 'Data not available';
+    }
     document.getElementById('API2_ItemValue').innerHTML = html;
 }

@@ -38,7 +38,7 @@ class DataRetrieve {
                         },
                         'CI': {
                             'name': 'Comfort Level',
-                            'unit': 'NA',
+                            'unit': '',
                         },
                         'PoP': {
                             'name': 'Probability of Preciptation',
@@ -153,7 +153,7 @@ class DataRetrieve {
             const data = await response.json();
             this.data.rawData = data;
             if (data.records.location.length === 0) {
-                console.log('Server/API down.');
+                console.log('API ID ', this.data.selectedAPI, ' Server/API down.');
                 data = 'NA';
             }
             // console.log(data);
@@ -358,50 +358,55 @@ async function DRroutine(APItype) {
 
 async function InitInfo() {
     // retrieve basic info to update webpage elements
-    var dr = new DataRetrieve();
-    var APIs = {};
+    try {
+        var dr = new DataRetrieve();
+        var APIs = {};
 
-    // get API into
-    APIs['APIs'] = {};
-    var APItypes = Object.keys(dr.data.APIs);
-    for (let index = 0; index < APItypes.length; index++) {
-        APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
+        // get API into
+        APIs['APIs'] = {};
+        var APItypes = Object.keys(dr.data.APIs);
+        for (let index = 0; index < APItypes.length; index++) {
+            APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
+        }
+
+        // get source
+        APIs['source'] = dr.data['src sites'];
+
+        // get API1 data
+        APIs['F-C0032-001'] = {};
+        var dr = new DataRetrieve('F-C0032-001');
+        var data = await dr.requestAPI(dr.data.Token['User01']);
+        // get API1 location option
+        dr.extractLocation();
+        dr.generateLocationOption();
+        // get API1 item option
+        dr.extractItem();
+        dr.generateItemOption();
+        // set API1 location option
+        APIs['F-C0032-001']['locationOption'] = dr.data.LocationOption;
+        // set API1 item option
+        APIs['F-C0032-001']['itemOption'] = dr.data.ItemOption;
+
+        // get API2 data
+        APIs['O-A0001-001'] = {};
+        var dr = new DataRetrieve('O-A0001-001');
+        var data = await dr.requestAPI(dr.data.Token['User01']);
+        // get API2 location option
+        dr.extractLocation();
+        dr.generateLocationOption();
+        // get API2 item option
+        dr.extractItem();
+        dr.generateItemOption();
+        // set API2 location option
+        APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
+        // set API2 item option
+        APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
+
+        return APIs;
+    } catch (error) {
+        console.log(error)
+        return false;
     }
-
-    // get source
-    APIs['source'] = dr.data['src sites'];
-
-    // get API1 data
-    APIs['F-C0032-001'] = {};
-    var dr = new DataRetrieve('F-C0032-001');
-    var data = await dr.requestAPI(dr.data.Token['User01']);
-    // get API1 location option
-    dr.extractLocation();
-    dr.generateLocationOption();
-    // get API1 item option
-    dr.extractItem();
-    dr.generateItemOption();
-    // set API1 location option
-    APIs['F-C0032-001']['locationOption'] = dr.data.LocationOption;
-    // set API1 item option
-    APIs['F-C0032-001']['itemOption'] = dr.data.ItemOption;
-
-    // get API2 data
-    APIs['O-A0001-001'] = {};
-    var dr = new DataRetrieve('O-A0001-001');
-    var data = await dr.requestAPI(dr.data.Token['User01']);
-    // get API2 location option
-    dr.extractLocation();
-    dr.generateLocationOption();
-    // get API2 item option
-    dr.extractItem();
-    dr.generateItemOption();
-    // set API2 location option
-    APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
-    // set API2 item option
-    APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
-
-    return APIs;
 }
 
 async function DRsingleRun(APItype, location, item) {
