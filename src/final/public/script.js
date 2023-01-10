@@ -1,4 +1,4 @@
-import { DRroutine, InitInfo, InitInfoSources, InitInfoAPI1, InitInfoAPI2, DRsingleRun, DataRetrieve } from './dataRetrieve.js';
+import { DRroutine, InitInfoSources, InitInfoAPI1, InitInfoAPI2, DRsingleRun, DataRetrieve } from './dataRetrieve.js';
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -12,7 +12,6 @@ var API2_flag = { location: false, item: false };
 
 document.addEventListener('DOMContentLoaded', async function () {
     // initFirebase();
-    // APIs = await initWebpageElement();
     initWebpageElementSources();
     APIs = await initWebpageElementAPI1(APIs);
     APIs = await initWebpageElementAPI2(APIs);
@@ -182,83 +181,6 @@ function initFirebase() {
         loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     }
     // console.log('Hello from Firebase!');
-}
-
-async function initWebpageElement() {
-    // ment to initialize all webpage elements, but seperated due to individual API failure.
-    var html = '';
-    const Info = await InitInfo();
-    // console.log(Info);
-    if (Info === false) {
-        console.log('Error: No Info Returned');
-        document.getElementById('API1_ItemValue').innerHTML = 'Error: No Info Returned from API/Server';
-        document.getElementById('API2_ItemValue').innerHTML = 'Error: No Info Returned from API/Server';
-        return;
-    }
-
-    // update API1 element
-    const api1 = Object.keys(Info.APIs)[0];
-    document.getElementById('API1_title').innerHTML = Info.APIs[api1];
-    document.getElementById('API1_description').innerHTML = 'API ID: ' + api1;
-
-    // update API2 element
-    const api2 = Object.keys(Info.APIs)[1];
-    document.getElementById('API2_title').innerHTML = Info.APIs[api2];
-    document.getElementById('API2_description').innerHTML = 'API ID: ' + api2;
-
-    // update sources
-    html = '';
-    html = document.getElementById('sources').innerHTML;
-    let keys = Object.keys(Info.source);
-    let length = keys.length;
-    for (let i = 0; i < length; i++) {
-        var link = '<a href="' + Info.source[keys[i]].link + ' target="_blank">' + Info.source[keys[i]].name + '</a>';
-        html += `${link}<br>`;
-    }
-    document.getElementById('sources').innerHTML = html;
-
-    // update API1 location options
-    html = '<option value="0">Please select</option>';
-    length = Object.keys(Info[api1].locationOption).length;
-    for (let i = 0; i < length; i++) {
-        var key = Object.keys(Info[api1].locationOption[i])[0];
-        var option = key;
-        html += `<option value="${key}">${option}</option>`;
-    }
-    document.getElementById('API1_Location').innerHTML = html;
-
-    // update API1 item options
-    html = '<option value="0">Please select</option>';
-    length = Object.keys(Info[api1].itemOption).length;
-    for (let i = 0; i < length; i++) {
-        var key = Object.keys(Info[api1].itemOption[i])[0];
-        var option = Info[api1].itemOption[i][key];
-        html += `<option value="${key}">${option}</option>`;
-    }
-    document.getElementById('API1_Item').innerHTML = html;
-
-    // update API2 location options
-    html = '<option value="0">Please select</option>';
-    length = Object.keys(Info[api2].locationOption).length;
-    for (let i = 0; i < length; i++) {
-        var key = Object.keys(Info[api2].locationOption[i])[0];
-        var option = Info[api2].locationOption[i][key];
-        html += `<option value="${key}">${option}</option>`;
-    }
-    document.getElementById('API2_Location').innerHTML = html;
-
-    // update API2 item options
-    html = '<option value="0">Please select</option>';
-    length = Object.keys(Info[api2].itemOption).length;
-    for (let i = 0; i < length; i++) {
-        var key = Object.keys(Info[api2].itemOption[i])[0];
-        var option = Info[api2].itemOption[i][key];
-        html += `<option value="${key}">${option}</option>`;
-    }
-    document.getElementById('API2_Item').innerHTML = html;
-
-    console.log('initWebpageElement done');
-    return { 'API1': api1, 'API2': api2 };
 }
 
 function initWebpageElementSources() {
