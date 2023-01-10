@@ -39,6 +39,10 @@ table {
     vertical-align: middle;
 }
 
+/* tr {
+    border-bottom: 10px solid black;
+} */
+
 select {
     float: right;
     display: inline-block;

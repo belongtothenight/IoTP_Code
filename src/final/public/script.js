@@ -310,7 +310,7 @@ function updateAPI1Element(value, unit, item) {
     html += '</table>';
     // console.log(html);
     document.getElementById('API1_ItemValue').innerHTML = html;
-    document.getElementById('API1_ItemValue').style.fontSize = '30px';
+    // document.getElementById('API1_ItemValue').style.fontSize = '30px';
 }
 
 function updateAPI2Element(value, unit) {
