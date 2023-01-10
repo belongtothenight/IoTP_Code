@@ -55,7 +55,6 @@ html {
 /* Left Split */
 .leftSplit {
     float: left;
-    /* position: absolute; */
     width: 30%;
     background-color: rgb(255, 170, 0);
 }
@@ -63,7 +62,6 @@ html {
 /* Right Split */
 .rightSplit {
     float: right;
-    /* position: absolute; */
     width: 70%;
     background-color: red;
 }
