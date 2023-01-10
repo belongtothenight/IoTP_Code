@@ -1,10 +1,20 @@
 class DataRetrieve {
+    // class object to store all data and functions related to data retrieve
     constructor(api) {
         this.data = {
             'src sites': {
-                'TWCWB_OpenData': 'https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/',
-                'TWCWB_Document': 'https://opendata.cwb.gov.tw/dataset/forecast?page=1',
-                'TWCWB_WordDict': 'https://www.cwb.gov.tw/V8/C/K/bilingual_glossary.html',
+                'TWCWB_OpenData': {
+                    'name': '中央氣象局開放資料平台之資料擷取API',
+                    'link': 'https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/',
+                },
+                'TWCWB_Document': {
+                    'name': '氣象資料開放平台',
+                    'link': 'https://opendata.cwb.gov.tw/dataset/forecast',
+                },
+                'TWCWB_WordDict': {
+                    'name': '氣象資料開放平台-中英文對照表',
+                    'link': 'https://www.cwb.gov.tw/V8/C/K/bilingual_glossary.html#/',
+                },
             },
             'APIs': {
                 // 'locationLyaer' is used to reduce replicated code, but if every API has totally different JSON structure, this is no use and can be abandoned.
@@ -284,9 +294,8 @@ class DataRetrieve {
     }
 
     extractItemValue(location, itemName) {
-        efi
         var locationData = this.data.rawData.records.location;
-        console.log(locationData)
+        // console.log(locationData)
 
         // switch condition here needs to be APIs
         switch (this.data.selectedAPI) {
@@ -326,8 +335,9 @@ class DataRetrieve {
 };
 
 async function DRroutine(APItype) {
+    // complete routine to retrieve data, useful for testing functions
     // var APItype = 'O-A0001-001';
-    var APItype = 'F-C0032-001';
+    // var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
     // console.log(dr.data.fullLink)
@@ -340,9 +350,57 @@ async function DRroutine(APItype) {
     // console.log(dr.data.Item);
     dr.generateItemOption();
     // console.log(dr.data.ItemOption);
-    // var value = dr.extractItemValue('C0A560', 'ELEV');
-    var value = dr.extractItemValue('嘉義縣', 'Wx');
+    var value = dr.extractItemValue('C0A560', 'ELEV');
+    // var value = dr.extractItemValue('嘉義縣', 'Wx');
     console.log(value)
 }
 
-export { DRroutine, DataRetrieve }
+async function InitInfo() {
+    // retrieve basic info to update webpage elements
+    var dr = new DataRetrieve();
+    var APIs = {};
+
+    // get API into
+    APIs['APIs'] = {};
+    var APItypes = Object.keys(dr.data.APIs);
+    for (let index = 0; index < APItypes.length; index++) {
+        APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
+    }
+
+    // get source
+    APIs['source'] = dr.data['src sites'];
+
+    // get API1 data
+    APIs['F-C0032-001'] = {};
+    var dr = new DataRetrieve('F-C0032-001');
+    var data = await dr.requestAPI(dr.data.Token['User01']);
+    // get API1 location option
+    dr.extractLocation();
+    dr.generateLocationOption();
+    // get API1 item option
+    dr.extractItem();
+    dr.generateItemOption();
+    // set API1 location option
+    APIs['F-C0032-001']['locationOption'] = dr.data.LocationOption;
+    // set API1 item option
+    APIs['F-C0032-001']['itemOption'] = dr.data.ItemOption;
+
+    // get API2 data
+    APIs['O-A0001-001'] = {};
+    var dr = new DataRetrieve('O-A0001-001');
+    var data = await dr.requestAPI(dr.data.Token['User01']);
+    // get API2 location option
+    dr.extractLocation();
+    dr.generateLocationOption();
+    // get API2 item option
+    dr.extractItem();
+    dr.generateItemOption();
+    // set API2 location option
+    APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
+    // set API2 item option
+    APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
+
+    return APIs;
+}
+
+export { DRroutine, InitInfo, DataRetrieve }

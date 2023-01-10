@@ -1,15 +1,24 @@
-import { DRroutine, DataRetrieve } from './dataRetrieve.js';
+import { DRroutine, InitInfo, DataRetrieve } from './dataRetrieve.js';
 
 document.addEventListener('DOMContentLoaded', function () {
-    initFirebase();
-
-    const DR = new DataRetrieve();
-    console.log(DR.data.APIs)
+    // initFirebase();
+    initWebpageElement();
 
     var APItype = 'O-A0001-001';
-    var APItype = 'F-C0032-001';
+    // var APItype = 'F-C0032-001';
     DRroutine(APItype);
 });
+
+document.getElementById('API1_Location').addEventListener('change', function () {
+    var APItype = 'O-A0001-001';
+    // var APItype = 'F-C0032-001';
+    // DRroutine(APItype);
+    var dr = new DataRetrieve(APItype);
+    var value = dr.extractItemValue('C0A560', 'ELEV');
+    // var value = dr.extractItemValue('嘉義縣', 'Wx');
+});
+
+// change https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
 
 function initFirebase() {
     const loadEl = document.querySelector('#load');
@@ -48,4 +57,73 @@ function initFirebase() {
         loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     }
     // console.log('Hello from Firebase!');
+}
+
+async function initWebpageElement() {
+    var html = '';
+    const Info = await InitInfo();
+    console.log(Info);
+
+    // update APIs title
+    const api1 = Object.keys(Info.APIs)[0];
+    const api2 = Object.keys(Info.APIs)[1];
+    document.getElementById('API1_title').innerHTML = Info.APIs[api1];
+    document.getElementById('API2_title').innerHTML = Info.APIs[api2];
+
+    // update APIs description
+    document.getElementById('API1_description').innerHTML = api1;
+    document.getElementById('API2_description').innerHTML = api2;
+
+    // update sources
+    html = '';
+    html = document.getElementById('source').innerHTML;
+    let keys = Object.keys(Info.source);
+    let length = keys.length;
+    for (let i = 0; i < length; i++) {
+        var link = '<a href="' + Info.source[keys[i]].link + ' target="_blank">' + Info.source[keys[i]].name + '</a>';
+        html += `${link}<br>`;
+    }
+    document.getElementById('source').innerHTML = html;
+
+    // update API1 location options
+    html = '<option value="0">Please select</option>';
+    length = Object.keys(Info[api1].locationOption).length;
+    for (let i = 0; i < length; i++) {
+        var key = Object.keys(Info[api1].locationOption[i])[0];
+        var option = key;
+        html += `<option value="${i + 1}">${option}</option>`;
+    }
+    document.getElementById('API1_Location').innerHTML = html;
+
+    // update API1 item options
+    html = '<option value="0">Please select</option>';
+    length = Object.keys(Info[api1].itemOption).length;
+    for (let i = 0; i < length; i++) {
+        var key = Object.keys(Info[api1].itemOption[i])[0];
+        var option = Info[api1].itemOption[i][key];
+        html += `<option value="${i + 1}">${option}</option>`;
+    }
+    document.getElementById('API1_Item').innerHTML = html;
+
+    // update API2 location options
+    html = '<option value="0">Please select</option>';
+    length = Object.keys(Info[api2].locationOption).length;
+    for (let i = 0; i < length; i++) {
+        var key = Object.keys(Info[api2].locationOption[i])[0];
+        var option = Info[api2].locationOption[i][key];
+        html += `<option value="${key}">${option}</option>`;
+    }
+    document.getElementById('API2_Location').innerHTML = html;
+
+    // update API2 item options
+    html = '<option value="0">Please select</option>';
+    length = Object.keys(Info[api2].itemOption).length;
+    for (let i = 0; i < length; i++) {
+        var key = Object.keys(Info[api2].itemOption[i])[0];
+        var option = Info[api2].itemOption[i][key];
+        html += `<option value="${key}">${option}</option>`;
+    }
+    document.getElementById('API2_Item').innerHTML = html;
+
+    console.log('initWebpageElement done');
 }
