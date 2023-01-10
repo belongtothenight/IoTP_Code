@@ -403,4 +403,11 @@ async function InitInfo() {
     return APIs;
 }
 
-export { DRroutine, InitInfo, DataRetrieve }
+async function DRsingleRun(APItype, location, item) {
+    var dr = new DataRetrieve(APItype);
+    var _ = await dr.requestAPI(dr.data.Token['User01']);
+    var value = dr.extractItemValue(location, item);
+    return value;
+}
+
+export { DRroutine, InitInfo, DRsingleRun, DataRetrieve }

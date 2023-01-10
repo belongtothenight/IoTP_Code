@@ -1,4 +1,6 @@
-import { DRroutine, InitInfo, DataRetrieve } from './dataRetrieve.js';
+import { DRroutine, InitInfo, DRsingleRun, DataRetrieve } from './dataRetrieve.js';
+
+var API1_flag = { location: false, item: false };
 
 document.addEventListener('DOMContentLoaded', function () {
     // initFirebase();
@@ -9,13 +11,18 @@ document.addEventListener('DOMContentLoaded', function () {
     DRroutine(APItype);
 });
 
-document.getElementById('API1_Location').addEventListener('change', function () {
-    var APItype = 'O-A0001-001';
-    // var APItype = 'F-C0032-001';
-    // DRroutine(APItype);
-    var dr = new DataRetrieve(APItype);
-    var value = dr.extractItemValue('C0A560', 'ELEV');
-    // var value = dr.extractItemValue('嘉義縣', 'Wx');
+document.getElementById('API1_Location').addEventListener('change', async function () {
+    API1_flag.location = true;
+    var value = await DRsingleRun('O-A0001-001', 'C0A560', 'ELEV');
+    // var value = await DRsingleRun('F-C0032-001', '嘉義縣', 'Wx');
+    console.log(value);
+});
+
+document.getElementById('API1_Item').addEventListener('change', async function () {
+    API1_flag.item = true;
+    var value = await DRsingleRun('O-A0001-001', 'C0A560', 'ELEV');
+    // var value = await DRsingleRun('F-C0032-001', '嘉義縣', 'Wx');
+    console.log(value);
 });
 
 // change https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
