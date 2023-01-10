@@ -336,7 +336,7 @@ class DataRetrieve {
 
 async function DRroutine(APItype) {
     // complete routine to retrieve data, useful for testing functions
-    // var APItype = 'O-A0001-001';
+    var APItype = 'O-A0001-001';
     // var APItype = 'F-C0032-001';
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
@@ -350,9 +350,9 @@ async function DRroutine(APItype) {
     // console.log(dr.data.Item);
     dr.generateItemOption();
     // console.log(dr.data.ItemOption);
-    var value = dr.extractItemValue('C0A560', 'ELEV');
+    // var value = dr.extractItemValue('C0A560', 'ELEV');
     // var value = dr.extractItemValue('嘉義縣', 'Wx');
-    console.log(value)
+    // console.log(value)
 }
 
 async function InitInfo() {
