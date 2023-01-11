@@ -59,9 +59,9 @@ async function restructureDatabase() {
     try {
         let db = new FirebaseRealtimeDatabase();
         const structure = await db.retrieveStructure();
-        console.log(structure);
+        // console.log(structure);
         const keys = Object.keys(structure);
-        console.log(keys);
+        // console.log(keys);
         if (keys !== db.keys) {
             db.refreshStructure();
         }
