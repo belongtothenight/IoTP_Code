@@ -170,10 +170,10 @@ class DataRetrieve {
         var data_length = location_data.length;
         var location_name = [];
 
-        console.log('locationLayer: ', this.data.APIs[this.data.selectedAPI].locationLayer);
+        // console.log('locationLayer: ', this.data.APIs[this.data.selectedAPI].locationLayer);
         switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
             case 'city':
-                console.log('city');
+                // console.log('city');
                 for (let index = 0; index < data_length; index++) {
                     var temp_locationName = location_data[index].locationName;
                     location_name[index] = {
@@ -184,7 +184,7 @@ class DataRetrieve {
             case 'town':
                 break;
             case 'station':
-                console.log('station');
+                // console.log('station');
                 for (let index = 0; index < data_length; index++) {
                     var temp_locationName = location_data[index].locationName;
                     var temp_cityName = location_data[index].parameter[0].parameterValue;
