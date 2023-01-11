@@ -383,13 +383,17 @@ async function InitInfoAPI1() {
     var API_retrieveFromDatabase = false; // default
     var API_retrieveFromAPI = false; //
     var API1_data = await readDatabase('API1/UpdateTime');
+    try {
+        var API1_dataLength = API1_data.length;
+    } catch (err) {
+        console.log('API1_data is not an array');
+    }
 
     // if database content is weird, retrieve from API
-    if (API1_data.length <= 2) {
+    if (API1_dataLength <= 2) {
         API_retrieveFromAPI = true;
         API_retrieveFromDatabase = false;
     } else {
-
         // if database content is outdated, retrieve from API
         var currentTime = new Date(Date.now() * 1000);
         const currentHour = currentTime.getHours();
@@ -411,8 +415,12 @@ async function InitInfoAPI1() {
     if (API_retrieveFromDatabase) {
         // retrieveFromDatabase
         var API1_data = await readDatabase('API1/RawData');
-        console.log(API1_data);
-        dr.data.rawData = API1_data;
+        // console.log(API1_data);
+        if (API1_data === false) {
+            API_retrieveFromDatabase = false;
+        } else {
+            dr.data.rawData = API1_data;
+        }
     } else if (API_retrieveFromAPI) {
         try {
             // get API1 data
@@ -432,6 +440,8 @@ async function InitInfoAPI1() {
             return false;
         }
     }
+    // console.log('API status: ', API_retrieveFromAPI);
+    // console.log('DB status: ', API_retrieveFromDatabase);
 
     // get API1 location option
     dr.extractLocation();
@@ -440,7 +450,7 @@ async function InitInfoAPI1() {
     dr.extractItem();
     dr.generateItemOption();
     // set API1 location option
-    console.log(dr.data);
+    // console.log(dr.data);
     APIs[API_ID]['locationOption'] = dr.data.LocationOption;
     // set API1 item option
     APIs[API_ID]['itemOption'] = dr.data.ItemOption;
@@ -449,20 +459,79 @@ async function InitInfoAPI1() {
 }
 
 async function InitInfoAPI2() {
-    var dr = new DataRetrieve();
     var APIs = {};
+    const API_ID = 'O-A0001-001';
+    var dr = new DataRetrieve(API_ID);
+    APIs['APIs'] = {};
+    APIs[API_ID] = {};
 
     // get API into
-    APIs['APIs'] = {};
     var APItypes = Object.keys(dr.data.APIs);
     for (let index = 0; index < APItypes.length; index++) {
         APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
     }
 
-    // get API2 data
-    APIs['O-A0001-001'] = {};
-    var dr = new DataRetrieve('O-A0001-001');
-    var data = await dr.requestAPI(dr.data.Token['User01']);
+    // determine to store or retrieve data in realtime database, or retrieve from API
+    var API_retrieveFromDatabase = false; // default
+    var API_retrieveFromAPI = false; //
+    var API2_data = await readDatabase('API2/UpdateTime');
+    try {
+        var API2_dataLength = API2_data.length;
+    } catch (err) {
+        console.log('API2_data is not an array');
+    }
+
+    // if database content is weird, retrieve from API
+    if (API2_dataLength <= 2) {
+        API_retrieveFromAPI = true;
+        API_retrieveFromDatabase = false;
+    } else {
+        // if database content is outdated, retrieve from API
+        var currentTime = new Date(Date.now() * 1000);
+        const currentHour = currentTime.getHours();
+        const currentMinute = currentTime.getMinutes();
+        const API2_dataTime = new Date(API2_data);
+        const API2_dataHour = API2_dataTime.getHours();
+        const API2_dataMinute = API2_dataTime.getMinutes();
+        const timeDifference = (currentHour - API2_dataHour) * 60 + (currentMinute - API2_dataMinute);
+        if (timeDifference > dr.data.APIs[API_ID].updateInterval) {
+            API_retrieveFromAPI = true;
+            API_retrieveFromDatabase = false;
+        } else {
+            API_retrieveFromAPI = false;
+            API_retrieveFromDatabase = true;
+        }
+    }
+
+    // retrieving
+    if (API_retrieveFromDatabase) {
+        // retrieveFromDatabase
+        var API2_data = await readDatabase('API2/RawData');
+        // console.log(API2_data);
+        if (API2_data === false) {
+            API_retrieveFromDatabase = false;
+        } else {
+            dr.data.rawData = API2_data;
+        }
+    } else if (API_retrieveFromAPI) {
+        try {
+            // get API2 data
+            await dr.requestAPI(dr.data.Token['User01']);
+            // store data in database
+            const writeData = {};
+            writeData['RawData'] = dr.data.rawData;
+            writeData['UpdateTime'] = (new Date(Date.now() * 1000)).toString();
+            console.log('API2 data updated at ' + writeData['UpdateTime'])
+            // console.log('Uploaded data', writeData)
+            writeDatabase('API2', writeData);
+        } catch (error) {
+            // if API is down, return false
+            console.log(error)
+            API_retrieveFromAPI = false;
+            return false;
+        }
+    }
+
     // get API2 location option
     dr.extractLocation();
     dr.generateLocationOption();
@@ -470,9 +539,9 @@ async function InitInfoAPI2() {
     dr.extractItem();
     dr.generateItemOption();
     // set API2 location option
-    APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
+    APIs[API_ID]['locationOption'] = dr.data.LocationOption;
     // set API2 item option
-    APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
+    APIs[API_ID]['itemOption'] = dr.data.ItemOption;
 
     return APIs;
 

@@ -14,10 +14,6 @@ var API2_flag = { location: false, item: false };
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.clear();
-    // restructureDatabase();
-    // writeDatabase('src_sites', '123');
-    const data = await readDatabase('src_sites');
-    console.log(data);
     initWebpageElementSources();
     APIs = await initWebpageElementAPI1(APIs);
     APIs = await initWebpageElementAPI2(APIs);
@@ -267,7 +263,7 @@ async function initWebpageElementAPI2(input) {
 
 async function initWebpageElementReader() {
     var options = await initInfoReader();
-    var html = '<option value="0">Please select</option>';
+    var html = '<option value="0">None</option>';
     var length = Object.keys(options).length;
     for (let i = 0; i < length; i++) {
         var key = Object.keys(options[i])[0];

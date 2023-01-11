@@ -89,6 +89,7 @@ async function readDatabase(key) {
     } catch (error) {
         console.log(error);
         console.log('Unable to connect to database. Please check your internet connection.');
+        return false;
     }
 }
 
