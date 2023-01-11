@@ -203,7 +203,7 @@ async function initWebpageElementAPI1(input) {
     // console.log(Info);
     if (Info === false) {
         console.log('Error: API1 No Info Returned');
-        document.getElementById('API1_ItemValue').innerHTML = 'Error: No Info Returned from API1/Server';
+        document.getElementById('API1_ItemValue').innerHTML = 'Error: No Info Returned from API1/Server<br>Check Dev Tools Console for more info';
         input['API1'] = false;
         return input;
     }
@@ -244,7 +244,7 @@ async function initWebpageElementAPI2(input) {
     // console.log(Info);
     if (Info === false) {
         console.log('Error: API2 No Info Returned');
-        document.getElementById('API2_ItemValue').innerHTML = 'Error: No Info Returned from API2/Server';
+        document.getElementById('API2_ItemValue').innerHTML = 'Error: No Info Returned from API1/Server<br>Check Dev Tools Console for more info';
         input['API2'] = false;
         return input;
     }

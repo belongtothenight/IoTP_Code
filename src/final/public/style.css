@@ -37,6 +37,9 @@ p {
 table {
     text-align: center;
     vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 /* tr {
@@ -118,6 +121,7 @@ label {
     width: 60%;
     /* background-color: red; */
     padding: 5%;
+    vertical-align: center;
 }
 
 /* Top Split */
