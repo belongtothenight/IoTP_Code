@@ -440,8 +440,7 @@ async function InitInfoAPI1() {
             return false;
         }
     }
-    // console.log('API status: ', API_retrieveFromAPI);
-    // console.log('DB status: ', API_retrieveFromDatabase);
+    console.log('API/DB status:' + API_retrieveFromAPI + '/' + API_retrieveFromDatabase);
 
     // get API1 location option
     dr.extractLocation();
@@ -531,6 +530,7 @@ async function InitInfoAPI2() {
             return false;
         }
     }
+    console.log('API/DB status:' + API_retrieveFromAPI + '/' + API_retrieveFromDatabase);
 
     // get API2 location option
     dr.extractLocation();
