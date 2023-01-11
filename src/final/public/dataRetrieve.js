@@ -26,7 +26,7 @@ class DataRetrieve {
                     'itemDict': {
                         'Wx': {
                             'name': 'Weather Condition',
-                            'unit': 'NA',
+                            'unit': '',
                         },
                         'MaxT': {
                             'name': 'Maximum Temperature',
@@ -100,7 +100,7 @@ class DataRetrieve {
                         },
                         'H_FXT': {
                             'name': 'Maximum Wind Time this hour',
-                            'unit': 'hms',
+                            'unit': '',
                         },
                         'D_TX': {
                             'name': 'Maximum Temperature today',
@@ -108,7 +108,7 @@ class DataRetrieve {
                         },
                         'D_TXT': {
                             'name': 'Maximum Temperature Time today',
-                            'unit': 'hms',
+                            'unit': '',
                         },
                         'D_TN': {
                             'name': 'Minimum Temperature today',
@@ -116,11 +116,11 @@ class DataRetrieve {
                         },
                         'D_TNT': {
                             'name': 'Minimum Temperature Time today',
-                            'unit': 'hms',
+                            'unit': '',
                         },
                         'Weather': {
                             'name': 'Weather',
-                            'unit': 'NA',
+                            'unit': '',
                         }
                     },
                 },

@@ -111,16 +111,17 @@ label {
 /* Left Split */
 .leftSplit {
     float: left;
-    width: 40%;
+    width: 50%;
     /* background-color: rgb(255, 170, 0); */
+    /* padding: 5%; */
 }
 
 /* Right Split */
 .rightSplit {
     float: right;
-    width: 60%;
+    width: 50%;
     /* background-color: red; */
-    padding: 5%;
+    padding-top: 2%;
     vertical-align: center;
 }
 
@@ -129,6 +130,7 @@ label {
     float: top;
     width: 100%;
     /* background-color: red; */
+    padding-left: 5%;
 }
 
 /* Bottom Split */
@@ -136,6 +138,7 @@ label {
     float: bottom;
     width: 100%;
     /* background-color: red; */
+    padding-left: 5%;
 }
 
 /* Clear floats after the columns */

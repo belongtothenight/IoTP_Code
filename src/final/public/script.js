@@ -1,4 +1,5 @@
 import { DRroutine, InitInfoSources, InitInfoAPI1, InitInfoAPI2, DRsingleRun, DataRetrieve } from './dataRetrieve.js';
+import { Reader, initInfoReader, read } from './reader.js';
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -11,14 +12,13 @@ var API2_flag = { location: false, item: false };
 // Webpage element functions
 
 document.addEventListener('DOMContentLoaded', async function () {
+    console.clear();
     // initFirebase();
     initWebpageElementSources();
     APIs = await initWebpageElementAPI1(APIs);
     APIs = await initWebpageElementAPI2(APIs);
     // console.log(APIs);
-    // var APItype = APIs.API1;
-    // var APItype = APIs.API2;
-    // DRroutine(APItype);
+    initWebpageElementReader();
 });
 
 document.getElementById('API1_Location').addEventListener('change', async function () {
@@ -108,6 +108,7 @@ document.getElementById('API2_Location').addEventListener('change', async functi
         var unit = dr.data.APIs[APIs.API2].itemDict[item].unit;
         console.log(returnValue, unit);
         updateAPI2Element(returnValue, unit);
+        read(returnValue + unit, Reader.voiceSelect);
     }
 });
 
@@ -138,7 +139,26 @@ document.getElementById('API2_Item').addEventListener('change', async function (
         var unit = dr.data.APIs[APIs.API2].itemDict[item].unit;
         console.log(returnValue, unit);
         updateAPI2Element(returnValue, unit);
+        read(returnValue + unit, Reader.voiceSelect);
     }
+});
+
+document.getElementById('reader').addEventListener('change', async function () {
+    const readerReturn = document.getElementById('reader');
+    const readerValue = readerReturn.value;
+    var readerName = readerReturn.options[readerReturn.selectedIndex].text;
+    // make sure to select something but default option
+    if (readerValue == 0) {
+        console.log('no reader selected');
+        return;
+    }
+    // read user input
+    var lang = document.getElementById('reader').value;
+    // read output
+    console.log('Selected voice: ', lang);
+    Reader.voiceSelect = lang;
+    console.log(Reader.voiceSelect);
+    read('Reader ' + readerName + ' selected!', lang);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -279,6 +299,19 @@ async function initWebpageElementAPI2(input) {
     return input;
 }
 
+async function initWebpageElementReader() {
+    var options = await initInfoReader();
+    var html = '<option value="0">Please select</option>';
+    var length = Object.keys(options).length;
+    for (let i = 0; i < length; i++) {
+        var key = Object.keys(options[i])[0];
+        var option = options[i][key];
+        html += `<option value="${key}">${option}</option>`;
+    }
+    document.getElementById('reader').innerHTML = html;
+    console.log('initWebpageElementReader done');
+}
+
 function updateAPI1Element(value, unit, item) {
     var html = '<table>';
     var length1 = value.length;
@@ -321,6 +354,8 @@ function updateAPI2Element(value, unit) {
     document.getElementById('API2_ItemValue').innerHTML = html;
     document.getElementById('API2_ItemValue').style.fontSize = '30px';
 }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Element Modification
