@@ -1,11 +1,14 @@
 # Taiwan Central Weather Bureau OpenData
 
-[Webpage: https://iotp-fdde2.web.app/](https://iotp-fdde2.web.app/)
-
 1. Data retrieved from Taiwan Central Weather Bureau Opendata Platform API.
 2. Speake current and forecast weather info. (based on user GPS location)
 
-<https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/>
+## Links
+
+1. Finished webpage: <https://iotp-fdde2.web.app/>
+2. Firebase hosting: <https://console.firebase.google.com/project/iotp-fdde2/hosting/sites>
+3. Firebase realtime database: <https://console.firebase.google.com/project/iotp-fdde2/database/iotp-fdde2-default-rtdb/data>
+4. API: <https://opendata.cwb.gov.tw/dist/opendata-swagger.html#/>
 
 ## Report Structure
 
