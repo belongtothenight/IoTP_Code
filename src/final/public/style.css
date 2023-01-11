@@ -68,6 +68,11 @@ label {
     font-size: 20px;
 }
 
+button {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: rgba(255, 255, 255, 0.3);
+}
+
 /* Header/Blog Title */
 .header {
     padding: 30px;

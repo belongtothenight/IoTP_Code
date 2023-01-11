@@ -162,6 +162,19 @@ document.getElementById('reader').addEventListener('change', async function () {
     read('Reader ' + readerName + ' selected!', lang);
 });
 
+document.getElementById('resetDatabase').addEventListener('click', async function () {
+    await restructureDatabase();
+    console.log('Database reset');
+});
+
+document.getElementById('resetWebsite').addEventListener('click', async function () {
+    APIs = await initWebpageElementAPI1(APIs);
+    APIs = await initWebpageElementAPI2(APIs);
+    await initWebpageElementReader();
+    initWebpageElementSources();
+    console.log('Webpage reset');
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // Support functions
 
