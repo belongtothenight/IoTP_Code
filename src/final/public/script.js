@@ -1,5 +1,6 @@
 import { DRroutine, InitInfoSources, InitInfoAPI1, InitInfoAPI2, DRsingleRun, DataRetrieve } from './dataRetrieve.js';
 import { Reader, initInfoReader, read } from './reader.js';
+import { FirebaseRealtimeDatabase, restructureDatabase, writeDatabase, readDatabase, } from './database.js';
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -13,12 +14,16 @@ var API2_flag = { location: false, item: false };
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.clear();
-    // initFirebase();
+    restructureDatabase();
+    writeDatabase('src_sites', '123');
+    const data = await readDatabase('src_sites');
+    console.log(data);
     initWebpageElementSources();
     APIs = await initWebpageElementAPI1(APIs);
     APIs = await initWebpageElementAPI2(APIs);
     // console.log(APIs);
     initWebpageElementReader();
+    console.log('Webpage loaded');
 });
 
 document.getElementById('API1_Location').addEventListener('change', async function () {
@@ -163,45 +168,6 @@ document.getElementById('reader').addEventListener('change', async function () {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Support functions
-
-function initFirebase() {
-    const loadEl = document.querySelector('#load');
-    // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-    // // The Firebase SDK is initialized and available here!
-    //
-    // firebase.auth().onAuthStateChanged(user => { });
-    // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-    // firebase.firestore().doc('/foo/bar').get().then(() => { });
-    // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-    // firebase.messaging().requestPermission().then(() => { });
-    // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-    // firebase.analytics(); // call to activate
-    // firebase.analytics().logEvent('tutorial_completed');
-    // firebase.performance(); // call to activate
-    //
-    // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-    try {
-        // let app = firebase.app();
-        // let features = [
-        //     'auth',
-        //     'database',
-        //     'firestore',
-        //     'functions',
-        //     'messaging',
-        //     'storage',
-        //     'analytics',
-        //     'remoteConfig',
-        //     'performance',
-        // ].filter(feature => typeof app[feature] === 'function');
-        // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        loadEl.textContent = 'Hello from Firebase!';
-    } catch (e) {
-        console.error(e);
-        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-    }
-    // console.log('Hello from Firebase!');
-}
 
 function initWebpageElementSources() {
     var html = '';
