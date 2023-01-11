@@ -60,7 +60,7 @@ class DataRetrieve {
                 // },
                 'O-A0001-001': {
                     'description': 'Weather Observation',
-                    'updateInterval': '1', // 1 hour
+                    'updateInterval': '1', // 1 hour // regularly down at 11 minut each hour
                     'locationLayer': 'station',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=',
                     'itemDict': {
@@ -170,8 +170,10 @@ class DataRetrieve {
         var data_length = location_data.length;
         var location_name = [];
 
+        console.log('locationLayer: ', this.data.APIs[this.data.selectedAPI].locationLayer);
         switch (this.data.APIs[this.data.selectedAPI].locationLayer) {
             case 'city':
+                console.log('city');
                 for (let index = 0; index < data_length; index++) {
                     var temp_locationName = location_data[index].locationName;
                     location_name[index] = {
@@ -182,6 +184,7 @@ class DataRetrieve {
             case 'town':
                 break;
             case 'station':
+                console.log('station');
                 for (let index = 0; index < data_length; index++) {
                     var temp_locationName = location_data[index].locationName;
                     var temp_cityName = location_data[index].parameter[0].parameterValue;
@@ -364,12 +367,13 @@ function InitInfoSources() {
 }
 
 async function InitInfoAPI1() {
-    var dr = new DataRetrieve();
     var APIs = {};
     const API_ID = 'F-C0032-001';
+    var dr = new DataRetrieve(API_ID);
+    APIs['APIs'] = {};
+    APIs[API_ID] = {};
 
     // get API into
-    APIs['APIs'] = {};
     var APItypes = Object.keys(dr.data.APIs);
     for (let index = 0; index < APItypes.length; index++) {
         APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
@@ -404,15 +408,14 @@ async function InitInfoAPI1() {
     }
 
     // retrieving
-    var dr;
     if (API_retrieveFromDatabase) {
         // retrieveFromDatabase
         var API1_data = await readDatabase('API1/RawData');
+        console.log(API1_data);
+        dr.data.rawData = API1_data;
     } else if (API_retrieveFromAPI) {
         try {
             // get API1 data
-            APIs[API_ID] = {};
-            dr = new DataRetrieve(API_ID);
             // store data in mem
             await dr.requestAPI(dr.data.Token['User01']);
             // store data in database
@@ -437,6 +440,7 @@ async function InitInfoAPI1() {
     dr.extractItem();
     dr.generateItemOption();
     // set API1 location option
+    console.log(dr.data);
     APIs[API_ID]['locationOption'] = dr.data.LocationOption;
     // set API1 item option
     APIs[API_ID]['itemOption'] = dr.data.ItemOption;
@@ -445,37 +449,33 @@ async function InitInfoAPI1() {
 }
 
 async function InitInfoAPI2() {
-    try {
-        var dr = new DataRetrieve();
-        var APIs = {};
+    var dr = new DataRetrieve();
+    var APIs = {};
 
-        // get API into
-        APIs['APIs'] = {};
-        var APItypes = Object.keys(dr.data.APIs);
-        for (let index = 0; index < APItypes.length; index++) {
-            APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
-        }
-
-        // get API2 data
-        APIs['O-A0001-001'] = {};
-        var dr = new DataRetrieve('O-A0001-001');
-        var data = await dr.requestAPI(dr.data.Token['User01']);
-        // get API2 location option
-        dr.extractLocation();
-        dr.generateLocationOption();
-        // get API2 item option
-        dr.extractItem();
-        dr.generateItemOption();
-        // set API2 location option
-        APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
-        // set API2 item option
-        APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
-
-        return APIs;
-    } catch (error) {
-        console.log(error)
-        return false;
+    // get API into
+    APIs['APIs'] = {};
+    var APItypes = Object.keys(dr.data.APIs);
+    for (let index = 0; index < APItypes.length; index++) {
+        APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
     }
+
+    // get API2 data
+    APIs['O-A0001-001'] = {};
+    var dr = new DataRetrieve('O-A0001-001');
+    var data = await dr.requestAPI(dr.data.Token['User01']);
+    // get API2 location option
+    dr.extractLocation();
+    dr.generateLocationOption();
+    // get API2 item option
+    dr.extractItem();
+    dr.generateItemOption();
+    // set API2 location option
+    APIs['O-A0001-001']['locationOption'] = dr.data.LocationOption;
+    // set API2 item option
+    APIs['O-A0001-001']['itemOption'] = dr.data.ItemOption;
+
+    return APIs;
+
 }
 
 async function DRsingleRun(APItype, location, item) {
