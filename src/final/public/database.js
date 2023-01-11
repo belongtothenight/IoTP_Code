@@ -19,18 +19,12 @@ class FirebaseRealtimeDatabase {
     constructor() {
         this.emptyStructure = {
             'API1': {
-                'APIs': "NA",
-                'ItemOptions': "NA",
-                'LocationOptions': "NA",
-                'RawData': "NA",
-                'UpdateTime': "NA",
+                'RawData': "NA", // raw data from api
+                'UpdateTime': "NA", // Date string
             },
             'API2': {
-                'APIs': "NA",
-                'ItemOptions': "NA",
-                'LocationOptions': "NA",
-                'RawData': "NA",
-                'UpdateTime': "NA",
+                'RawData': "NA", // raw data from api
+                'UpdateTime': "NA", // Date string
             },
         };
         this.keys = Object.keys(this.emptyStructure);

@@ -1,3 +1,5 @@
+import { FirebaseRealtimeDatabase, restructureDatabase, writeDatabase, readDatabase, } from './database.js';
+
 class DataRetrieve {
     // class object to store all data and functions related to data retrieve
     constructor(api) {
@@ -20,7 +22,7 @@ class DataRetrieve {
                 // 'locationLyaer' is used to reduce replicated code, but if every API has totally different JSON structure, this is no use and can be abandoned.
                 'F-C0032-001': {
                     'description': 'Weather Forecast',
-                    'updateFrequency': '6', // 6 hours
+                    'updateInterval': '6', // 6 hours
                     'locationLayer': 'city',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=',
                     'itemDict': {
@@ -48,17 +50,17 @@ class DataRetrieve {
                 },
                 // 'F-A0021-001': {
                 //     'description': 'Tide Forecast',
-                //     'updateFrequency': '24', // 24 hours
+                //     'updateInterval': '24', // 24 hours
                 //     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization='
                 // },
                 // 'F-A0085-003': {
                 //     'description': 'Health Weather Cold Injury',
-                //     'updateFrequency': '6', // 6 hours
+                //     'updateInterval': '6', // 6 hours
                 //     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-A0085-003?Authorization='
                 // },
                 'O-A0001-001': {
                     'description': 'Weather Observation',
-                    'updateFrequency': '1', // 1 hour
+                    'updateInterval': '1', // 1 hour
                     'locationLayer': 'station',
                     'link': 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=',
                     'itemDict': {
@@ -76,11 +78,11 @@ class DataRetrieve {
                         },
                         'TEMP': {
                             'name': 'Temperature',
-                            'unit': 'm/s',
+                            'unit': '°C',
                         },
                         'HUMD': {
                             'name': 'Humidity',
-                            'unit': 'g/kg',
+                            'unit': '%',
                         },
                         'PRES': {
                             'name': 'Pressure',
@@ -338,7 +340,7 @@ class DataRetrieve {
 async function DRroutine(APItype) {
     // complete routine to retrieve data, useful for testing functions
     var APItype = 'O-A0001-001';
-    // var APItype = 'F-C0032-001';
+    // var APItype = API_ID;
     var dr = new DataRetrieve(APItype);
     var data = await dr.requestAPI(dr.data.Token['User01']);
     // console.log(dr.data.fullLink)
@@ -362,37 +364,84 @@ function InitInfoSources() {
 }
 
 async function InitInfoAPI1() {
-    try {
-        var dr = new DataRetrieve();
-        var APIs = {};
+    var dr = new DataRetrieve();
+    var APIs = {};
+    const API_ID = 'F-C0032-001';
 
-        // get API into
-        APIs['APIs'] = {};
-        var APItypes = Object.keys(dr.data.APIs);
-        for (let index = 0; index < APItypes.length; index++) {
-            APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
-        }
-
-        // get API1 data
-        APIs['F-C0032-001'] = {};
-        var dr = new DataRetrieve('F-C0032-001');
-        var data = await dr.requestAPI(dr.data.Token['User01']);
-        // get API1 location option
-        dr.extractLocation();
-        dr.generateLocationOption();
-        // get API1 item option
-        dr.extractItem();
-        dr.generateItemOption();
-        // set API1 location option
-        APIs['F-C0032-001']['locationOption'] = dr.data.LocationOption;
-        // set API1 item option
-        APIs['F-C0032-001']['itemOption'] = dr.data.ItemOption;
-
-        return APIs;
-    } catch (error) {
-        console.log(error)
-        return false;
+    // get API into
+    APIs['APIs'] = {};
+    var APItypes = Object.keys(dr.data.APIs);
+    for (let index = 0; index < APItypes.length; index++) {
+        APIs.APIs[APItypes[index]] = dr.data.APIs[APItypes[index]].description;
     }
+
+    // determine to store or retrieve data in realtime database, or retrieve from API
+    var API_retrieveFromDatabase = false; // default
+    var API_retrieveFromAPI = false; //
+    var API1_data = await readDatabase('API1/UpdateTime');
+
+    // if database content is weird, retrieve from API
+    if (API1_data.length <= 2) {
+        API_retrieveFromAPI = true;
+        API_retrieveFromDatabase = false;
+    } else {
+
+        // if database content is outdated, retrieve from API
+        var currentTime = new Date(Date.now() * 1000);
+        const currentHour = currentTime.getHours();
+        const currentMinute = currentTime.getMinutes();
+        const API1_dataTime = new Date(API1_data);
+        const API1_dataHour = API1_dataTime.getHours();
+        const API1_dataMinute = API1_dataTime.getMinutes();
+        const timeDifference = (currentHour - API1_dataHour) * 60 + (currentMinute - API1_dataMinute);
+        if (timeDifference > dr.data.APIs[API_ID].updateInterval) {
+            API_retrieveFromAPI = true;
+            API_retrieveFromDatabase = false;
+        } else {
+            API_retrieveFromAPI = false;
+            API_retrieveFromDatabase = true;
+        }
+    }
+
+    // retrieving
+    var dr;
+    if (API_retrieveFromDatabase) {
+        // retrieveFromDatabase
+        var API1_data = await readDatabase('API1/RawData');
+    } else if (API_retrieveFromAPI) {
+        try {
+            // get API1 data
+            APIs[API_ID] = {};
+            dr = new DataRetrieve(API_ID);
+            // store data in mem
+            await dr.requestAPI(dr.data.Token['User01']);
+            // store data in database
+            const writeData = {};
+            writeData['RawData'] = dr.data.rawData;
+            writeData['UpdateTime'] = (new Date(Date.now() * 1000)).toString();
+            console.log('API1 data updated at ' + writeData['UpdateTime'])
+            // console.log('Uploaded data', writeData)
+            writeDatabase('API1', writeData);
+        } catch (error) {
+            // if API is down, return false
+            console.log(error)
+            API_retrieveFromAPI = false;
+            return false;
+        }
+    }
+
+    // get API1 location option
+    dr.extractLocation();
+    dr.generateLocationOption();
+    // get API1 item option
+    dr.extractItem();
+    dr.generateItemOption();
+    // set API1 location option
+    APIs[API_ID]['locationOption'] = dr.data.LocationOption;
+    // set API1 item option
+    APIs[API_ID]['itemOption'] = dr.data.ItemOption;
+
+    return APIs;
 }
 
 async function InitInfoAPI2() {

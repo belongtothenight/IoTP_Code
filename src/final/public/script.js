@@ -14,8 +14,8 @@ var API2_flag = { location: false, item: false };
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.clear();
-    restructureDatabase();
-    writeDatabase('src_sites', '123');
+    // restructureDatabase();
+    // writeDatabase('src_sites', '123');
     const data = await readDatabase('src_sites');
     console.log(data);
     initWebpageElementSources();
