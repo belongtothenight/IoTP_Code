@@ -48,7 +48,8 @@ document.getElementById('API1_Location').addEventListener('change', async functi
         // get unit
         var dr = new DataRetrieve();
         var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
-        updateAPI1Element(returnValue, unit, item);
+        var text = updateAPI1Element(returnValue, unit, item);
+        read(text, Reader.voiceSelect);
     }
 });
 
@@ -78,7 +79,8 @@ document.getElementById('API1_Item').addEventListener('change', async function (
         // get unit
         var dr = new DataRetrieve();
         var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
-        updateAPI1Element(returnValue, unit, item);
+        var text = updateAPI1Element(returnValue, unit, item);
+        read(text, Reader.voiceSelect);
     }
 });
 
@@ -288,6 +290,7 @@ async function initWebpageElementReader() {
 }
 
 function updateAPI1Element(value, unit, item) {
+    var readText = '';
     var html = '<table>';
     var length1 = value.length;
     for (let i = 0; i < length1; i++) {
@@ -314,11 +317,15 @@ function updateAPI1Element(value, unit, item) {
             content[3] = unit;
         }
         html += `<tr><td>${content[0]} - ${content[1]}</td><td>${content[2]} ${content[3]}</td></tr>`;
+        if (i === 0) {
+            readText = content[2] + ' ' + content[3];
+        }
     }
     html += '</table>';
     // console.log(html);
     document.getElementById('API1_ItemValue').innerHTML = html;
     // document.getElementById('API1_ItemValue').style.fontSize = '30px';
+    return readText;
 }
 
 function updateAPI2Element(value, unit) {

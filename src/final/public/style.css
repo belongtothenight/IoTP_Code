@@ -53,6 +53,10 @@ select {
     font-size: 20px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
+    font-family: Roboto,
+        Helvetica,
+        "黑體-繁",
+        "微軟正黑體";
     /* text-align: right; */
 }
 
