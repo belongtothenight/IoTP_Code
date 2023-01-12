@@ -10,11 +10,14 @@ var API1_flag = { location: false, item: false };
 var API2_flag = { location: false, item: false };
 var voices; // store speech synthesis voices
 var selectedVoice; // store selected speech synthesis voice
+var databaseConnectionTimeout = 20; // timeout for database connection in seconds
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Webpage element functions
 
 document.addEventListener('DOMContentLoaded', async function () {
+    const startTime = Date.now();
+
     console.clear();
     initWebpageElementSources();
     APIs = await initWebpageElementAPI1(APIs);
@@ -22,6 +25,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     // console.log(APIs);
     initWebpageElementReader();
     console.log('Webpage loaded');
+
+    var id = window.setInterval(function () {
+        if (Date.now() - startTime > databaseConnectionTimeout * 1000) {
+            window.clearInterval(id);
+            console.log('reached timeout for database connection');
+            firebase.database().goOffline();
+            console.log('terminated firebase realtime database connection');
+        }
+    }, 1000);
 });
 
 document.getElementById('API1_Location').addEventListener('change', async function () {
@@ -190,7 +202,6 @@ function initWebpageElementSources() {
     }
     document.getElementById('sources').innerHTML = html;
     console.log('initWebpageElementSources done');
-    firebase.goOffline();
 }
 
 async function initWebpageElementAPI1(input) {
