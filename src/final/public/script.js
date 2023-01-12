@@ -337,8 +337,6 @@ function updateAPI2Element(value, unit) {
     document.getElementById('API2_ItemValue').style.fontSize = '30px';
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // Element Modification
 // https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
