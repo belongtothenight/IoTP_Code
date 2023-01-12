@@ -77,6 +77,7 @@ function speak() {
         }
         utterThis.pitch = pitch.value;
         utterThis.rate = rate.value;
+        console.log(utterThis)
         synth.speak(utterThis);
     }
 }

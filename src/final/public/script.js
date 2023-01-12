@@ -8,6 +8,8 @@ import { FirebaseRealtimeDatabase, restructureDatabase, writeDatabase, readDatab
 var APIs = {}; // store API names
 var API1_flag = { location: false, item: false };
 var API2_flag = { location: false, item: false };
+var voices; // store speech synthesis voices
+var selectedVoice; // store selected speech synthesis voice
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Webpage element functions
@@ -49,7 +51,7 @@ document.getElementById('API1_Location').addEventListener('change', async functi
         var dr = new DataRetrieve();
         var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
         var text = updateAPI1Element(returnValue, unit, item);
-        read(text, Reader.voiceSelect);
+        read(text, selectedVoice);
     }
 });
 
@@ -80,7 +82,7 @@ document.getElementById('API1_Item').addEventListener('change', async function (
         var dr = new DataRetrieve();
         var unit = dr.data.APIs[APIs.API1].itemDict[item].unit;
         var text = updateAPI1Element(returnValue, unit, item);
-        read(text, Reader.voiceSelect);
+        read(text, selectedVoice);
     }
 });
 
@@ -111,7 +113,7 @@ document.getElementById('API2_Location').addEventListener('change', async functi
         var unit = dr.data.APIs[APIs.API2].itemDict[item].unit;
         console.log(returnValue, unit);
         updateAPI2Element(returnValue, unit);
-        read(returnValue + unit, Reader.voiceSelect);
+        read(returnValue + unit, selectedVoice);
     }
 });
 
@@ -142,7 +144,7 @@ document.getElementById('API2_Item').addEventListener('change', async function (
         var unit = dr.data.APIs[APIs.API2].itemDict[item].unit;
         console.log(returnValue, unit);
         updateAPI2Element(returnValue, unit);
-        read(returnValue + unit, Reader.voiceSelect);
+        read(returnValue + unit, selectedVoice);
     }
 });
 
@@ -156,11 +158,8 @@ document.getElementById('reader').addEventListener('change', async function () {
         return;
     }
     // read user input
-    var lang = document.getElementById('reader').value;
-    // read output
-    console.log('Selected voice: ', lang);
-    Reader.voiceSelect = lang;
-    console.log(Reader.voiceSelect);
+    const lang = findAndReturnVoice(readerValue, voices);
+    selectedVoice = lang;
     read('Reader ' + readerName + ' selected!', lang);
 });
 
@@ -279,12 +278,15 @@ async function initWebpageElementAPI2(input) {
 async function initWebpageElementReader() {
     var options = await initInfoReader();
     var html = '<option value="0">None</option>';
-    var length = Object.keys(options).length;
+    var length = options.length;
     for (let i = 0; i < length; i++) {
-        var key = Object.keys(options[i])[0];
-        var option = options[i][key];
+        // console.log(options[i]);
+        var key = options[i].lang;
+        var option = options[i].name;
         html += `<option value="${key}">${option}</option>`;
     }
+    voices = options;
+    // console.log(voices);
     document.getElementById('reader').innerHTML = html;
     console.log('initWebpageElementReader done');
 }
@@ -335,6 +337,16 @@ function updateAPI2Element(value, unit) {
     }
     document.getElementById('API2_ItemValue').innerHTML = html;
     document.getElementById('API2_ItemValue').style.fontSize = '30px';
+}
+
+function findAndReturnVoice(lang, voices) {
+    var length = voices.length;
+    for (let i = 0; i < length; i++) {
+        if (voices[i].lang === lang) {
+            return voices[i];
+        }
+    }
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

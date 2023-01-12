@@ -8,7 +8,7 @@ class Reader {
         this.voiceSelect; // ex 'en-US';
         this.pitch = 1;
         this.rate = 1;
-        this.voices = [];
+        this.voices = []; // simplified array of voices object
     }
 
     async populateVoiceList() {
@@ -67,14 +67,10 @@ class Reader {
                 console.error("SpeechSynthesisUtterance.onerror");
             };
 
-            for (let i = 0; i < this.voices.length; i++) {
-                if (this.voices[i].lang === this.voiceSelect) {
-                    utterThis.voice = this.voices[i];
-                    break;
-                }
-            }
+            utterThis.voice = this.voiceSelect;
             utterThis.pitch = this.pitch;
             utterThis.rate = this.rate;
+            // console.log(utterThis);
             this.synth.speak(utterThis);
         }
     }
@@ -84,14 +80,17 @@ async function initInfoReader() {
     const reader = new Reader();
     await reader.populateVoiceList();
     var options = [];
-    reader.voices.forEach((voice) => {
-        var tempObj = {};
-        tempObj[voice.lang] = voice.name;
-        options.push(tempObj);
-    });
-    // console.log(options)
-    Reader.voices = options;
-    return options;
+    // Reader.voiceOptions = reader.voices;// not working
+    // reader.voices.forEach((voice) => {
+    //     var tempObj = {};
+    //     tempObj[voice.lang] = voice.name;
+    //     options.push(tempObj);
+    // });
+    // Reader.voices = options;// not working
+    Reader.voices = reader.voices;
+    // console.log(Reader.voices);
+    // console.log(Reader.voiceOptions);
+    return reader.voices;
 }
 
 function read(text, lang) {
