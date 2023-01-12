@@ -402,7 +402,8 @@ async function InitInfoAPI1() {
         const API1_dataHour = API1_dataTime.getHours();
         const API1_dataMinute = API1_dataTime.getMinutes();
         const timeDifference = (currentHour - API1_dataHour) * 60 + (currentMinute - API1_dataMinute);
-        if (timeDifference > dr.data.APIs[API_ID].updateInterval * 60) {
+        // 1.1: extra time to prevent updating database while API is down.
+        if (timeDifference > dr.data.APIs[API_ID].updateInterval * 60 * 1.1) {
             API_retrieveFromAPI = true;
             API_retrieveFromDatabase = false;
         } else {
@@ -494,7 +495,8 @@ async function InitInfoAPI2() {
         const API2_dataHour = API2_dataTime.getHours();
         const API2_dataMinute = API2_dataTime.getMinutes();
         const timeDifference = (currentHour - API2_dataHour) * 60 + (currentMinute - API2_dataMinute);
-        if (timeDifference > dr.data.APIs[API_ID].updateInterval * 60) {
+        // 1.1: extra time to prevent updating database while API is down.
+        if (timeDifference > dr.data.APIs[API_ID].updateInterval * 60 * 1.1) {
             API_retrieveFromAPI = true;
             API_retrieveFromDatabase = false;
         } else {

@@ -36,3 +36,5 @@ gitlab?
 
 1. User login page (account, password, token).
 2. Data management page.
+3. Auto-request data if outdated.
+4. Add functionality to force close all connections. <https://livinglifetechway.com/keep-your-firebase-realtime-database-connections-to-minimum/> <https://stackoverflow.com/questions/67445606/how-to-remove-all-simultaneous-connections-from-firebase>

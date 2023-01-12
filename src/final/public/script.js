@@ -190,6 +190,7 @@ function initWebpageElementSources() {
     }
     document.getElementById('sources').innerHTML = html;
     console.log('initWebpageElementSources done');
+    firebase.goOffline();
 }
 
 async function initWebpageElementAPI1(input) {
