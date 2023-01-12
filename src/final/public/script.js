@@ -181,7 +181,6 @@ document.getElementById('resetWebsite').addEventListener('click', async function
 
 function initWebpageElementSources() {
     var html = '';
-    html = document.getElementById('sources').innerHTML;
     var Info = InitInfoSources();
     let keys = Object.keys(Info);
     let length = keys.length;

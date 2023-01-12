@@ -395,7 +395,7 @@ async function InitInfoAPI1() {
         API_retrieveFromDatabase = false;
     } else {
         // if database content is outdated, retrieve from API
-        var currentTime = new Date(Date.now() * 1000);
+        var currentTime = new Date(Date.now());
         const currentHour = currentTime.getHours();
         const currentMinute = currentTime.getMinutes();
         const API1_dataTime = new Date(API1_data);
@@ -421,7 +421,8 @@ async function InitInfoAPI1() {
         } else {
             dr.data.rawData = API1_data;
         }
-    } else if (API_retrieveFromAPI) {
+    }
+    if (API_retrieveFromAPI) {
         try {
             // get API1 data
             // store data in mem
@@ -429,7 +430,7 @@ async function InitInfoAPI1() {
             // store data in database
             const writeData = {};
             writeData['RawData'] = dr.data.rawData;
-            writeData['UpdateTime'] = (new Date(Date.now() * 1000)).toString();
+            writeData['UpdateTime'] = (new Date(Date.now())).toString();
             console.log('API1 data updated at ' + writeData['UpdateTime'])
             // console.log('Uploaded data', writeData)
             writeDatabase('API1', writeData);
@@ -441,10 +442,6 @@ async function InitInfoAPI1() {
         }
     }
     console.log('API1/DB status: ' + API_retrieveFromAPI + ' / ' + API_retrieveFromDatabase);
-    if (API_retrieveFromAPI === false && API_retrieveFromDatabase === false) {
-        return false;
-        // prevent bugs
-    }
 
     // get API1 location option
     dr.extractLocation();
@@ -490,7 +487,7 @@ async function InitInfoAPI2() {
         API_retrieveFromDatabase = false;
     } else {
         // if database content is outdated, retrieve from API
-        var currentTime = new Date(Date.now() * 1000);
+        var currentTime = new Date(Date.now());
         const currentHour = currentTime.getHours();
         const currentMinute = currentTime.getMinutes();
         const API2_dataTime = new Date(API2_data);
@@ -516,14 +513,15 @@ async function InitInfoAPI2() {
         } else {
             dr.data.rawData = API2_data;
         }
-    } else if (API_retrieveFromAPI) {
+    }
+    if (API_retrieveFromAPI) {
         try {
             // get API2 data
             await dr.requestAPI(dr.data.Token['User01']);
             // store data in database
             const writeData = {};
             writeData['RawData'] = dr.data.rawData;
-            writeData['UpdateTime'] = (new Date(Date.now() * 1000)).toString();
+            writeData['UpdateTime'] = (new Date(Date.now())).toString();
             console.log('API2 data updated at ' + writeData['UpdateTime'])
             // console.log('Uploaded data', writeData)
             writeDatabase('API2', writeData);
@@ -535,10 +533,6 @@ async function InitInfoAPI2() {
         }
     }
     console.log('API2/DB status: ' + API_retrieveFromAPI + ' / ' + API_retrieveFromDatabase);
-    if (API_retrieveFromAPI === false && API_retrieveFromDatabase === false) {
-        return false;
-        // prevent bugs
-    }
 
     // get API2 location option
     dr.extractLocation();
